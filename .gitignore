@@ -1,0 +1,9 @@
+node_modules
+playground
+dist
+.env
+ca-certificate.crt
+
+.DS_Store
+
+coverage
