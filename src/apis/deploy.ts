@@ -1,6 +1,6 @@
 import express from 'express';
 import getDatabaseConnection from '../drivers/databases/DatabaseInstance';
-import { buildPushAndDeploy } from '../graphql/resolvers/DeployAppResolver';
+import { buildPushAndDeploy } from '../graphql/resolvers/apps/DeployAppResolver';
 
 export default async function handleDeployApi(
   req: express.Request<{ token: string; app_id: string }>,

@@ -1,7 +1,7 @@
-import { GqlAppInput } from '../../generated/graphql';
-import { KubepiterApp } from '../../types/common';
-import GraphContext from '../../types/GraphContext';
-import KubepiterError from '../../types/KubepiterError';
+import { GqlAppInput } from '../../../generated/graphql';
+import { KubepiterApp } from '../../../types/common';
+import GraphContext from '../../../types/GraphContext';
+import KubepiterError from '../../../types/KubepiterError';
 
 export default async function CreateAppResolver(
   _,

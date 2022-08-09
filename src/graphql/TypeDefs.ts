@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-core'
+import { gql } from 'apollo-server-core';
 
 const GraphQLTypeDefs = gql`
   scalar JSON
@@ -22,11 +22,8 @@ const GraphQLTypeDefs = gql`
     login(username: String!, password: String!, ttl: Int): LoginResponse
     updateApp(id: ID!, value: AppInput): Boolean
     createApp(id: ID!, value: AppInput): String
-    deployApp(
-      id: ID!
-      deploy: Boolean = True
-      build: Boolean = True
-    ): DeployResponse
+    deployApp(id: ID!, deploy: Boolean = True, build: Boolean = True): DeployResponse
+    regenerateAppWebhook(id: ID!): String
   }
 
   type NodeGroup {
@@ -158,6 +155,6 @@ const GraphQLTypeDefs = gql`
     limit: Float
     request: Float
   }
-`
+`;
 
-export default GraphQLTypeDefs
+export default GraphQLTypeDefs;

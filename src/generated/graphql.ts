@@ -126,13 +126,16 @@ export type GqlMutation = {
   createApp?: Maybe<Scalars['String']>;
   deployApp?: Maybe<GqlDeployResponse>;
   login?: Maybe<GqlLoginResponse>;
+  regenerateAppWebhook?: Maybe<Scalars['String']>;
   updateApp?: Maybe<Scalars['Boolean']>;
 };
+
 
 export type GqlMutationCreateAppArgs = {
   id: Scalars['ID'];
   value?: InputMaybe<GqlAppInput>;
 };
+
 
 export type GqlMutationDeployAppArgs = {
   build?: InputMaybe<Scalars['Boolean']>;
@@ -140,11 +143,18 @@ export type GqlMutationDeployAppArgs = {
   id: Scalars['ID'];
 };
 
+
 export type GqlMutationLoginArgs = {
   password: Scalars['String'];
   ttl?: InputMaybe<Scalars['Int']>;
   username: Scalars['String'];
 };
+
+
+export type GqlMutationRegenerateAppWebhookArgs = {
+  id: Scalars['ID'];
+};
+
 
 export type GqlMutationUpdateAppArgs = {
   id: Scalars['ID'];
@@ -172,13 +182,16 @@ export type GqlQuery = {
   version?: Maybe<Scalars['String']>;
 };
 
+
 export type GqlQueryAppArgs = {
   id: Scalars['ID'];
 };
 
+
 export type GqlQueryBuildLogArgs = {
   id: Scalars['ID'];
 };
+
 
 export type GqlQueryBuildLogsArgs = {
   appId?: InputMaybe<Scalars['String']>;

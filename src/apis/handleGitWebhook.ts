@@ -2,7 +2,7 @@ import express from 'express';
 import getDatabaseConnection from '../drivers/databases/DatabaseInstance';
 import GithubWebhookParser from '../drivers/webhook/GithubWebhookParser';
 import { GitWebhookEvent } from '../drivers/webhook/GitWebhookParserInterface';
-import { buildPushAndDeploy } from '../graphql/resolvers/DeployAppResolver';
+import { buildPushAndDeploy } from '../graphql/resolvers/apps/DeployAppResolver';
 
 export default async function handleGitWebhook(req: express.Request, res: express.Response) {
   const token = req.params.token;

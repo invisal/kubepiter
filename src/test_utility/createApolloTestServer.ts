@@ -10,7 +10,7 @@ export default function createApolloTestServer(context: Partial<GraphContext>) {
   const server = new ApolloServer({
     typeDefs: GraphQLTypeDefs,
     resolvers: GraphQLResolvers,
-    context,
+    context: () => context,
   });
 
   return Object.freeze({

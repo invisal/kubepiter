@@ -1,11 +1,11 @@
-import { KubepiterApp } from '../../types/common';
-import GraphContext from '../../types/GraphContext';
 import * as k8s from '@kubernetes/client-node';
-import { buildDeploymentFromApp, buildIngressFromApp, buildServiceFromApp } from '../../yaml/YamlBuilder';
-import { getBuildManager, ImageBuildJobStatus } from '../../k8s/ImageBuilderManager';
-import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork } from '../../k8s/getKubernete';
-import KubepiterError from '../../types/KubepiterError';
-import DatabaseInterface from '../../drivers/databases/DatabaseInterface';
+import DatabaseInterface from '../../../drivers/databases/DatabaseInterface';
+import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork } from '../../../k8s/getKubernete';
+import { getBuildManager, ImageBuildJobStatus } from '../../../k8s/ImageBuilderManager';
+import { KubepiterApp } from '../../../types/common';
+import GraphContext from '../../../types/GraphContext';
+import KubepiterError from '../../../types/KubepiterError';
+import { buildDeploymentFromApp, buildServiceFromApp, buildIngressFromApp } from '../../../yaml/YamlBuilder';
 
 async function deployToKube(app: KubepiterApp) {
   let errorMessage = '';
