@@ -1,13 +1,13 @@
-import { KubeboxApp } from '../../types/common';
+import { KubepiterApp } from '../../types/common';
 import GraphContext from '../../types/GraphContext';
 import * as k8s from '@kubernetes/client-node';
 import { buildDeploymentFromApp, buildIngressFromApp, buildServiceFromApp } from '../../yaml/YamlBuilder';
 import { getBuildManager, ImageBuildJobStatus } from '../../k8s/ImageBuilderManager';
 import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork } from '../../k8s/getKubernete';
-import getDatabaseConnection from '../../drivers/databases/DatabaseInstance';
 import KubepiterError from '../../types/KubepiterError';
+import DatabaseInterface from '../../drivers/databases/DatabaseInterface';
 
-async function deployToKube(app: KubeboxApp) {
+async function deployToKube(app: KubepiterApp) {
   let errorMessage = '';
 
   const deploymentYaml = await buildDeploymentFromApp(app);
@@ -95,13 +95,13 @@ async function deployToKube(app: KubeboxApp) {
   };
 }
 
-export function buildPushAndDeploy(app: KubeboxApp, deploy: boolean, build: boolean) {
+export function buildPushAndDeploy(db: DatabaseInterface, app: KubepiterApp, deploy: boolean, build: boolean) {
   // Increase version by one
   const version = app.version + 1;
 
   // Success callback
   const onSuccess = () => {
-    return getDatabaseConnection().updatePartialAppById(app.id, {
+    return db.updatePartialAppById(app.id, {
       version,
     });
   };
@@ -141,7 +141,7 @@ export default async function DeployAppResolver(
   if (!ctx.user) throw new KubepiterError.NoPermission();
 
   const app = await ctx.db.getAppById(id);
-  buildPushAndDeploy(app, deploy, build);
+  buildPushAndDeploy(ctx.db, app, deploy, build);
 
   return {};
 }

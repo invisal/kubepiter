@@ -37,7 +37,7 @@ export default async function handleGitWebhook(req: express.Request, res: expres
         version: app.version,
       });
 
-      buildPushAndDeploy(app, true, true);
+      buildPushAndDeploy(getDatabaseConnection(), app, true, true);
 
       return res.json({
         success: true,

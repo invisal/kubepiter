@@ -1,5 +1,5 @@
 import { GqlAppInput } from '../../generated/graphql';
-import { KubeboxApp } from '../../types/common';
+import { KubepiterApp } from '../../types/common';
 import GraphContext from '../../types/GraphContext';
 import KubepiterError from '../../types/KubepiterError';
 
@@ -18,7 +18,7 @@ export default async function CreateAppResolver(
     version: 1,
     port: 80,
     ...value,
-  } as KubeboxApp);
+  } as KubepiterApp);
 
   return id;
 }

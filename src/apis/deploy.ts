@@ -1,10 +1,10 @@
-import express from "express";
-import getDatabaseConnection from "../drivers/databases/DatabaseInstance";
-import { buildPushAndDeploy } from "../graphql/resolvers/DeployAppResolver";
+import express from 'express';
+import getDatabaseConnection from '../drivers/databases/DatabaseInstance';
+import { buildPushAndDeploy } from '../graphql/resolvers/DeployAppResolver';
 
 export default async function handleDeployApi(
   req: express.Request<{ token: string; app_id: string }>,
-  res: express.Response
+  res: express.Response,
 ) {
   const token = req.params.token;
   const appId = req.params.app_id;
@@ -13,7 +13,7 @@ export default async function handleDeployApi(
   const app = await db.getAppById(appId);
   if (token !== app.webhookToken) {
     return res.status(500).json({
-      error: "Invalid token",
+      error: 'Invalid token',
     });
   }
 
@@ -23,7 +23,7 @@ export default async function handleDeployApi(
     version: app.version,
   });
 
-  buildPushAndDeploy(app, true, true);
+  buildPushAndDeploy(getDatabaseConnection(), app, true, true);
 
   return res.json({});
 }

@@ -1,10 +1,10 @@
-import { KubeboxApp } from '../types/common';
+import { KubepiterApp } from '../types/common';
 import _, { merge } from 'lodash';
 import { V1Deployment, V1PodSpec } from '@kubernetes/client-node';
 import { Environment } from '../Environment';
 import getDatabaseConnection from '../drivers/databases/DatabaseInstance';
 
-export function buildIngressFromApp(app: KubeboxApp) {
+export function buildIngressFromApp(app: KubepiterApp) {
   const ingress = {
     apiVersion: 'networking.k8s.io/v1',
     kind: 'Ingress',
@@ -45,7 +45,7 @@ export function buildIngressFromApp(app: KubeboxApp) {
   return ingress;
 }
 
-export async function buildDeploymentFromApp(app: KubeboxApp): Promise<V1Deployment> {
+export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deployment> {
   let nodeSelector: V1PodSpec['nodeSelector'] | undefined;
   if (app.nodeGroup) {
     const nodeGroup = await getDatabaseConnection().getNodeGroup(app.nodeGroup);
@@ -107,7 +107,7 @@ export async function buildDeploymentFromApp(app: KubeboxApp): Promise<V1Deploym
   };
 }
 
-export function buildServiceFromApp(app: KubeboxApp) {
+export function buildServiceFromApp(app: KubepiterApp) {
   return {
     apiVersion: 'v1',
     kind: 'Service',

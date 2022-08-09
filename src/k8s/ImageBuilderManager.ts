@@ -128,8 +128,11 @@ export class ImageBuilderManager {
   }
 }
 
-const singleBuildManager = new ImageBuilderManager(getKuberneteCore(), getDatabaseConnection());
+let singleBuildManager: ImageBuilderManager;
 
 export function getBuildManager() {
+  if (!singleBuildManager) {
+    singleBuildManager = new ImageBuilderManager(getKuberneteCore(), getDatabaseConnection());
+  }
   return singleBuildManager;
 }

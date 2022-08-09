@@ -4,7 +4,7 @@ import {
   KubepiterBuilderSetting,
   KubepiterBuildJobLog,
   KubepiterNodeGroup,
-  KubeboxApp,
+  KubepiterApp,
   KubepiterUser,
 } from '../../types/common';
 import DatabaseInterface from './DatabaseInterface';
@@ -31,24 +31,24 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     return this.db;
   }
 
-  async getAppById(id: string): Promise<KubeboxApp> {
+  async getAppById(id: string): Promise<KubepiterApp> {
     const db = await this.getConnection();
-    return await db.collection('apps').findOne<KubeboxApp>({ id });
+    return db.collection('apps').findOne<KubepiterApp>({ id });
   }
 
-  async createApp(id: string, value: Partial<KubeboxApp>): Promise<boolean> {
+  async createApp(id: string, value: Partial<KubepiterApp>): Promise<boolean> {
     const db = await this.getConnection();
     await db.collection('apps').insertOne({ ...value, id });
     return true;
   }
 
-  async getAppList(): Promise<KubeboxApp[]> {
+  async getAppList(): Promise<KubepiterApp[]> {
     const db = await this.getConnection();
-    const cursor = db.collection<KubeboxApp>('apps').find();
-    return await cursor.toArray();
+    const cursor = db.collection<KubepiterApp>('apps').find();
+    return cursor.toArray();
   }
 
-  async updatePartialAppById(id: string, partialValue: Partial<KubeboxApp>): Promise<boolean> {
+  async updatePartialAppById(id: string, partialValue: Partial<KubepiterApp>): Promise<boolean> {
     const db = await this.getConnection();
     await db.collection('apps').updateOne({ id }, { $set: partialValue });
     return true;
@@ -56,17 +56,17 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
 
   async getUserByUsername(username: string): Promise<KubepiterUser> {
     const db = await this.getConnection();
-    return await db.collection('users').findOne<KubepiterUser>({ username });
+    return db.collection('users').findOne<KubepiterUser>({ username });
   }
 
   async getUserById(id: string): Promise<KubepiterUser> {
     const db = await this.getConnection();
-    return await db.collection('users').findOne<KubepiterUser>({ id });
+    return db.collection('users').findOne<KubepiterUser>({ id });
   }
 
   async getUserToken(token: string): Promise<KubepiterUserToken> {
     const db = await this.getConnection();
-    return await db.collection('user_tokens').findOne<WithId<KubepiterUserToken>>({ token });
+    return db.collection('user_tokens').findOne<WithId<KubepiterUserToken>>({ token });
   }
 
   async createUserToken(token: string, userId: string, ttl: number): Promise<boolean> {
@@ -82,13 +82,13 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   }
 
   async getNodeGroup(tag: string): Promise<KubepiterNodeGroup | undefined> {
-    return await this.db.collection('node_groups').findOne<KubepiterNodeGroup>({ tag });
+    return this.db.collection('node_groups').findOne<KubepiterNodeGroup>({ tag });
   }
 
   async getNodeGroupList(): Promise<KubepiterNodeGroup[]> {
     const db = await this.getConnection();
     const cursor = db.collection<KubepiterNodeGroup>('node_groups').find();
-    return await cursor.toArray();
+    return cursor.toArray();
   }
 
   async getBuilderSetting(): Promise<KubepiterBuilderSetting> {
@@ -123,7 +123,7 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
       })
       .skip(offset)
       .limit(limit);
-    return await cursor.toArray();
+    return cursor.toArray();
   }
 
   async insertBuildLog(log: KubepiterBuildJobLog): Promise<string> {

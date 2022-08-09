@@ -3,17 +3,17 @@ import {
   KubepiterBuilderSetting,
   KubepiterBuildJobLog,
   KubepiterNodeGroup,
-  KubeboxApp,
+  KubepiterApp,
   KubepiterUser,
 } from '../../types/common';
 
 export default abstract class DatabaseInterface {
   // App
-  abstract getAppById(id: string): Promise<KubeboxApp>;
-  abstract getAppList(): Promise<KubeboxApp[]>;
-  abstract updatePartialAppById(id: string, partialValue: Partial<KubeboxApp>): Promise<boolean>;
+  abstract getAppById(id: string): Promise<KubepiterApp>;
+  abstract getAppList(): Promise<KubepiterApp[]>;
+  abstract updatePartialAppById(id: string, partialValue: Partial<KubepiterApp>): Promise<boolean>;
 
-  abstract createApp(id: string, value: Partial<KubeboxApp>): Promise<boolean>;
+  abstract createApp(id: string, value: Partial<KubepiterApp>): Promise<boolean>;
 
   // User
   abstract getUserByUsername(username: string): Promise<KubepiterUser>;

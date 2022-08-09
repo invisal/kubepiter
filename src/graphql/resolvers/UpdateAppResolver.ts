@@ -1,5 +1,5 @@
 import { GqlAppInput } from '../../generated/graphql';
-import { KubeboxApp } from '../../types/common';
+import { KubepiterApp } from '../../types/common';
 import GraphContext from '../../types/GraphContext';
 import KubepiterError from '../../types/KubepiterError';
 
@@ -15,7 +15,7 @@ export default async function UpdateAppResolver(
   await ctx.db.updatePartialAppById(id, {
     ...value,
     git: value.git ? { ...app.git, ...value.git } : app.git,
-  } as KubeboxApp);
+  } as KubepiterApp);
 
   return true;
 }
