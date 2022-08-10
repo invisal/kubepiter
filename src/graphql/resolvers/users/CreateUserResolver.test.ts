@@ -1,4 +1,5 @@
 import { gql } from 'apollo-server-core';
+import bycrypt from 'bcrypt';
 import createApolloTestServer from '../../../test_utility/createApolloTestServer';
 import mockDatabaseInterface from '../../../test_utility/mockDatabaseInterface';
 
@@ -48,6 +49,6 @@ describe('CreateUserResolver', () => {
 
     const { data } = await mutate(MUTATION_CREATE_USER, { value: USER_TOBE_INSERTED });
     expect(data.createUser.id).toBe(USER_NEW_INSERTED_ID);
-    expect(mockUserInsert).toBeCalled();
+    expect(mockUserInsert.arguments).toBeCalled();
   });
 });

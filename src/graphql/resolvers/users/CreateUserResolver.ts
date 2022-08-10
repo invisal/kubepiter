@@ -11,7 +11,7 @@ export default async function CreateUserResolver(_, { value }: { value: GqlUserI
   const randomPassword = password.randomPassword();
 
   return {
-    id: await ctx.db.insertUser({ ...value, password: randomPassword }),
-    password: bycrypt.hashSync(randomPassword, 12),
+    id: await ctx.db.insertUser({ ...value, password: bycrypt.hashSync(randomPassword, 12) }),
+    password: randomPassword,
   };
 }
