@@ -10,24 +10,20 @@ import {
 import DatabaseInterface from './DatabaseInterface';
 
 export default class MongoDatabaseDriver extends DatabaseInterface {
-  protected connectionString: string;
-  protected connection: MongoClient;
+  protected client: MongoClient;
   protected db: Db;
+  protected databaseName: string;
 
-  constructor(connectionString: string, certFile?: string) {
+  constructor(client: MongoClient, databaseName: string) {
     super();
-    this.connectionString = connectionString;
-
-    this.connection = new MongoClient(connectionString, {
-      tlsCAFile: certFile,
-    });
+    this.client = client;
+    this.databaseName = databaseName;
   }
 
   protected async getConnection() {
     if (!this.db) {
-      this.db = (await this.connection.connect()).db('kubebox');
+      this.db = (await this.client.connect()).db(this.databaseName);
     }
-
     return this.db;
   }
 
@@ -63,6 +59,8 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     const db = await this.getConnection();
     const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ _id: new ObjectId(id) });
 
+    if (!r) return undefined;
+
     return {
       ...r,
       id: r._id.toString(),
@@ -89,16 +87,18 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   async getUserList(): Promise<KubepiterUser[]> {
     const db = await this.getConnection();
     const cursor = db.collection<KubepiterUser>('users').find();
-    return cursor.toArray();
+    return (await cursor.toArray()).map((user) => ({ ...user, id: user._id.toString() }));
   }
 
-  async insertUser(value: KubepiterUser): Promise<string> {
-    const result = await this.db.collection('users').insertOne(value);
+  async insertUser(value: Partial<KubepiterUser>): Promise<string> {
+    const db = await this.getConnection();
+    const result = await db.collection('users').insertOne(value);
     return result.insertedId.toString();
   }
 
-  async updateUser(id: string, value: KubepiterUser): Promise<boolean> {
-    const result = await this.db.collection('users').updateOne(
+  async updateUser(id: string, value: Partial<KubepiterUser>): Promise<boolean> {
+    const db = await this.getConnection();
+    const result = await db.collection('users').updateOne(
       { _id: new ObjectId(id) },
       {
         $set: value,
@@ -109,12 +109,14 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   }
 
   async deleteUser(id: string) {
-    const result = await this.db.collection('users').deleteOne({ _id: new ObjectId(id) });
+    const db = await this.getConnection();
+    const result = await db.collection('users').deleteOne({ _id: new ObjectId(id) });
     return result.acknowledged;
   }
 
   async getNodeGroup(tag: string): Promise<KubepiterNodeGroup | undefined> {
-    return this.db.collection('node_groups').findOne<KubepiterNodeGroup>({ tag });
+    const db = await this.getConnection();
+    return db.collection('node_groups').findOne<KubepiterNodeGroup>({ tag });
   }
 
   async getNodeGroupList(): Promise<KubepiterNodeGroup[]> {

@@ -19,9 +19,9 @@ export default abstract class DatabaseInterface {
   abstract getUserList(): Promise<KubepiterUser[]>;
   abstract getUserByUsername(username: string): Promise<KubepiterUser>;
   abstract getUserById(id: string): Promise<KubepiterUser>;
-  abstract insertUser(value: KubepiterUser): Promise<string>;
+  abstract insertUser(value: Partial<KubepiterUser>): Promise<string>;
   abstract deleteUser(id: string): Promise<boolean>;
-  abstract updateUser(id: string, value: KubepiterUser): Promise<boolean>;
+  abstract updateUser(id: string, value: Partial<KubepiterUser>): Promise<boolean>;
 
   abstract getUserToken(token: string): Promise<KubepiterUserToken>;
   abstract insertUserToken(token: string, userId: string, ttl: number): Promise<boolean>;
