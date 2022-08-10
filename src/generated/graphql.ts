@@ -179,6 +179,7 @@ export type GqlQuery = {
   nodeGroups?: Maybe<Array<Maybe<GqlNodeGroup>>>;
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;
   registries?: Maybe<Array<Maybe<GqlRegistry>>>;
+  user?: Maybe<GqlUser>;
   version?: Maybe<Scalars['String']>;
 };
 
@@ -197,6 +198,11 @@ export type GqlQueryBuildLogsArgs = {
   appId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type GqlQueryUserArgs = {
+  id: Scalars['ID'];
 };
 
 export type GqlRegistry = {
@@ -218,5 +224,6 @@ export type GqlResourceUsage = {
 export type GqlUser = {
   __typename?: 'User';
   id?: Maybe<Scalars['ID']>;
+  role?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
 };

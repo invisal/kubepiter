@@ -16,10 +16,15 @@ export default abstract class DatabaseInterface {
   abstract createApp(id: string, value: Partial<KubepiterApp>): Promise<boolean>;
 
   // User
+  abstract getUserList(): Promise<KubepiterUser[]>;
   abstract getUserByUsername(username: string): Promise<KubepiterUser>;
   abstract getUserById(id: string): Promise<KubepiterUser>;
+  abstract insertUser(value: KubepiterUser): Promise<string>;
+  abstract deleteUser(id: string): Promise<boolean>;
+  abstract updateUser(id: string, value: KubepiterUser): Promise<boolean>;
+
   abstract getUserToken(token: string): Promise<KubepiterUserToken>;
-  abstract createUserToken(token: string, userId: string, ttl: number): Promise<boolean>;
+  abstract insertUserToken(token: string, userId: string, ttl: number): Promise<boolean>;
 
   // Node
   abstract getNodeGroup(tag: string): Promise<KubepiterNodeGroup>;

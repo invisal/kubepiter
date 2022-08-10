@@ -1,4 +1,4 @@
-import { Db, MongoClient, WithId } from 'mongodb';
+import { Db, MongoClient, ObjectId, WithId } from 'mongodb';
 import {
   KubepiterUserToken,
   KubepiterBuilderSetting,
@@ -61,7 +61,12 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
 
   async getUserById(id: string): Promise<KubepiterUser> {
     const db = await this.getConnection();
-    return db.collection('users').findOne<KubepiterUser>({ id });
+    const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ _id: new ObjectId(id) });
+
+    return {
+      ...r,
+      id: r._id.toString(),
+    };
   }
 
   async getUserToken(token: string): Promise<KubepiterUserToken> {
@@ -69,7 +74,7 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     return db.collection('user_tokens').findOne<WithId<KubepiterUserToken>>({ token });
   }
 
-  async createUserToken(token: string, userId: string, ttl: number): Promise<boolean> {
+  async insertUserToken(token: string, userId: string, ttl: number): Promise<boolean> {
     const expireAt = new Date(new Date().getTime() + (ttl * 1000 || 24 * 60 * 60 * 1000));
 
     await this.db.collection('user_tokens').insertOne({
@@ -79,6 +84,33 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     });
 
     return true;
+  }
+
+  async getUserList(): Promise<KubepiterUser[]> {
+    const db = await this.getConnection();
+    const cursor = db.collection<KubepiterUser>('users').find();
+    return cursor.toArray();
+  }
+
+  async insertUser(value: KubepiterUser): Promise<string> {
+    const result = await this.db.collection('users').insertOne(value);
+    return result.insertedId.toString();
+  }
+
+  async updateUser(id: string, value: KubepiterUser): Promise<boolean> {
+    const result = await this.db.collection('users').updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: value,
+      },
+    );
+
+    return result.acknowledged;
+  }
+
+  async deleteUser(id: string) {
+    const result = await this.db.collection('users').deleteOne({ _id: new ObjectId(id) });
+    return result.acknowledged;
   }
 
   async getNodeGroup(tag: string): Promise<KubepiterNodeGroup | undefined> {

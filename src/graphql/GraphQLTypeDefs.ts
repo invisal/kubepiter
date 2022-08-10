@@ -5,7 +5,6 @@ const GraphQLTypeDefs = gql`
 
   type Query {
     version: String
-    me: User
     app(id: ID!): App
     apps: [App]
     nodes: [KubeNode]
@@ -16,6 +15,10 @@ const GraphQLTypeDefs = gql`
     buildLogs(appId: String, offset: Int = 0, limit: Int = 20): [BuildJob]
 
     nodeGroups: [NodeGroup]
+
+    # User
+    me: User
+    user(id: ID!): User
   }
 
   type Mutation {
@@ -58,6 +61,7 @@ const GraphQLTypeDefs = gql`
   type User {
     id: ID
     username: String
+    role: String
   }
 
   type App {
