@@ -47,11 +47,19 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
-          
+      
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.7.0
+      with:
+        mongodb-version: '5.0'
+
       - name: Install dependencies
         run: yarn install
         
       - name: Running test
+        env:
+          MONGO_CONNECTION_STRING: 'mongodb://127.0.0.1:27017'
+          MONGO_DB: 'kubepiter'
         run: yarn coverage
     
       - name: Analyze with SonarCloud         
