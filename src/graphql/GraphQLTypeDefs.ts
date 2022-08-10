@@ -27,6 +27,11 @@ const GraphQLTypeDefs = gql`
     createApp(id: ID!, value: AppInput): String
     deployApp(id: ID!, deploy: Boolean = True, build: Boolean = True): DeployResponse
     regenerateAppWebhook(id: ID!): String
+
+    # User
+    createUser(value: UserInput!): CreateUserResponse
+    updateUser(id: ID!, value: UserInput!): Boolean
+    deleteUser(id: ID!): Boolean
   }
 
   type NodeGroup {
@@ -62,6 +67,15 @@ const GraphQLTypeDefs = gql`
     id: ID
     username: String
     role: String
+  }
+
+  input UserInput {
+    username: String
+  }
+
+  type CreateUserResponse {
+    id: ID
+    password: String
   }
 
   type App {

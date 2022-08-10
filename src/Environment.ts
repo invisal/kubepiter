@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: `./.env.${process.env.NODE_ENV}` });
+dotenv.config({ path: `./.env.${process.env.NODE_ENV || 'development'}` });
 
 export const Environment = Object.freeze({
   HOST: process.env.HOST,

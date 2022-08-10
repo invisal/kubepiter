@@ -1,3 +1,3 @@
-export default async function CreateUserResolver() {
+export default async function DeleteUserResolver() {
   return '';
 }

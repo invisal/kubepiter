@@ -13,6 +13,7 @@ import AppsResolver from './resolvers/apps/AppsResolver';
 import DeployAppResolver from './resolvers/apps/DeployAppResolver';
 import VersionResolver from './resolvers/VersionResolver';
 import UserResolver from './resolvers/users/UserResolver';
+import CreateUserResolver from './resolvers/users/CreateUserResolver';
 
 const GraphQLResolvers = {
   Query: {
@@ -43,6 +44,7 @@ const GraphQLResolvers = {
     regenerateAppWebhook: RegenerateAppWebhookResolver,
 
     // User
+    createUser: CreateUserResolver,
   },
 };
 
