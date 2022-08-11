@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
-
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import GraphQLResolvers from './graphql/Resolvers';
-import GraphQLTypeDefs from './graphql/TypeDefs';
+import GraphQLResolvers from './graphql/GraphQLResolvers';
+import GraphQLTypeDefs from './graphql/GraphQLTypeDefs';
 import http from 'http';
 import setupApis from './apis';
 import { KubepiterUser } from './types/common';
@@ -12,7 +10,7 @@ import getDatabaseConnection from './drivers/databases/DatabaseInstance';
 import KubeMetric from './k8s/KubeMetric';
 import { getKuberneteCore, getKuberneterConfig } from './k8s/getKubernete';
 import parseTokenFromRequest from './libs/parseTokenFromRequest';
-dotenv.config();
+import { Environment } from './Environment';
 
 const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
@@ -56,7 +54,7 @@ async function startServer() {
 
   setupApis(app);
 
-  httpServer.listen({ port: process.env.PORT || 80 });
+  httpServer.listen({ port: Environment.PORT || 80 });
 }
 
 startServer().then(() => {

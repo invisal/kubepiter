@@ -11,11 +11,22 @@ import RegistriesResolver from './resolvers/RegistriesResolver';
 import UpdateAppResolver from './resolvers/UpdateAppResolver';
 import AppsResolver from './resolvers/apps/AppsResolver';
 import DeployAppResolver from './resolvers/apps/DeployAppResolver';
+import VersionResolver from './resolvers/VersionResolver';
+import UserResolver from './resolvers/users/UserResolver';
+import CreateUserResolver from './resolvers/users/CreateUserResolver';
+import DeleteUserResolver from './resolvers/users/DeleteUserResolver';
+import UpdateUserResolver from './resolvers/users/UpdateUserResolver';
+import UsersResolver from './resolvers/users/UsersResolver';
 
 const GraphQLResolvers = {
   Query: {
-    version: () => '1.2.3',
+    version: VersionResolver,
+
+    // User
     me: MeResolver,
+    user: UserResolver,
+    users: UsersResolver,
+
     apps: AppsResolver,
     app: AppResolver,
     nodes: NodesResolver,
@@ -26,12 +37,20 @@ const GraphQLResolvers = {
     registries: RegistriesResolver,
     nodeGroups: NodeGroupsResolver,
   },
+
   Mutation: {
     login: LoginResolver,
+
+    // App
     updateApp: UpdateAppResolver,
     createApp: CreateAppResolver,
     deployApp: DeployAppResolver,
     regenerateAppWebhook: RegenerateAppWebhookResolver,
+
+    // User
+    createUser: CreateUserResolver,
+    deleteUser: DeleteUserResolver,
+    updateUser: UpdateUserResolver,
   },
 };
 

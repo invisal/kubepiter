@@ -102,6 +102,12 @@ export type GqlBuildJob = {
   version?: Maybe<Scalars['String']>;
 };
 
+export type GqlCreateUserResponse = {
+  __typename?: 'CreateUserResponse';
+  id?: Maybe<Scalars['ID']>;
+  password?: Maybe<Scalars['String']>;
+};
+
 export type GqlDeployResponse = {
   __typename?: 'DeployResponse';
   message?: Maybe<Scalars['String']>;
@@ -124,16 +130,29 @@ export type GqlLoginResponse = {
 export type GqlMutation = {
   __typename?: 'Mutation';
   createApp?: Maybe<Scalars['String']>;
+  createUser?: Maybe<GqlCreateUserResponse>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
   deployApp?: Maybe<GqlDeployResponse>;
   login?: Maybe<GqlLoginResponse>;
   regenerateAppWebhook?: Maybe<Scalars['String']>;
   updateApp?: Maybe<Scalars['Boolean']>;
+  updateUser?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type GqlMutationCreateAppArgs = {
   id: Scalars['ID'];
   value?: InputMaybe<GqlAppInput>;
+};
+
+
+export type GqlMutationCreateUserArgs = {
+  value: GqlUserInput;
+};
+
+
+export type GqlMutationDeleteUserArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -161,6 +180,12 @@ export type GqlMutationUpdateAppArgs = {
   value?: InputMaybe<GqlAppInput>;
 };
 
+
+export type GqlMutationUpdateUserArgs = {
+  id: Scalars['ID'];
+  value: GqlUserInput;
+};
+
 export type GqlNodeGroup = {
   __typename?: 'NodeGroup';
   description?: Maybe<Scalars['String']>;
@@ -179,6 +204,8 @@ export type GqlQuery = {
   nodeGroups?: Maybe<Array<Maybe<GqlNodeGroup>>>;
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;
   registries?: Maybe<Array<Maybe<GqlRegistry>>>;
+  user?: Maybe<GqlUser>;
+  users?: Maybe<Array<Maybe<GqlUser>>>;
   version?: Maybe<Scalars['String']>;
 };
 
@@ -197,6 +224,11 @@ export type GqlQueryBuildLogsArgs = {
   appId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type GqlQueryUserArgs = {
+  id: Scalars['ID'];
 };
 
 export type GqlRegistry = {
@@ -218,5 +250,10 @@ export type GqlResourceUsage = {
 export type GqlUser = {
   __typename?: 'User';
   id?: Maybe<Scalars['ID']>;
+  role?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+};
+
+export type GqlUserInput = {
+  username?: InputMaybe<Scalars['String']>;
 };

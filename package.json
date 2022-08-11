@@ -26,6 +26,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.6",
     "@types/mock-express-request": "^0.2.0",
+    "@types/secure-random-password": "^0.2.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
@@ -57,6 +58,7 @@
     "graphql": "^16.5.0",
     "lodash": "^4.17.21",
     "mongodb": "^4.6.0",
+    "secure-random-password": "^0.2.3",
     "uuid": "^8.3.2",
     "yaml": "^2.1.0",
     "yarn": "^1.22.19"

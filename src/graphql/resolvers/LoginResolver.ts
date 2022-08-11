@@ -28,7 +28,7 @@ export default async function LoginResolver(_, { username, password, ttl }: Prop
       .toString('base64')
       .replace(/[\s=+/]/g, '');
 
-  await ctx.db.createUserToken(randomToken, user.id, ttl);
+  await ctx.db.insertUserToken(randomToken, user.id, ttl);
 
   return {
     token: randomToken,

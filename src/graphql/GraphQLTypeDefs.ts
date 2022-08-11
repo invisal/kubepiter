@@ -5,7 +5,6 @@ const GraphQLTypeDefs = gql`
 
   type Query {
     version: String
-    me: User
     app(id: ID!): App
     apps: [App]
     nodes: [KubeNode]
@@ -16,6 +15,11 @@ const GraphQLTypeDefs = gql`
     buildLogs(appId: String, offset: Int = 0, limit: Int = 20): [BuildJob]
 
     nodeGroups: [NodeGroup]
+
+    # User
+    me: User
+    user(id: ID!): User
+    users: [User]
   }
 
   type Mutation {
@@ -24,6 +28,11 @@ const GraphQLTypeDefs = gql`
     createApp(id: ID!, value: AppInput): String
     deployApp(id: ID!, deploy: Boolean = True, build: Boolean = True): DeployResponse
     regenerateAppWebhook(id: ID!): String
+
+    # User
+    createUser(value: UserInput!): CreateUserResponse
+    updateUser(id: ID!, value: UserInput!): Boolean
+    deleteUser(id: ID!): Boolean
   }
 
   type NodeGroup {
@@ -58,6 +67,16 @@ const GraphQLTypeDefs = gql`
   type User {
     id: ID
     username: String
+    role: String
+  }
+
+  input UserInput {
+    username: String
+  }
+
+  type CreateUserResponse {
+    id: ID
+    password: String
   }
 
   type App {

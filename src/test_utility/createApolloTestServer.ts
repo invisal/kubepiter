@@ -2,8 +2,8 @@ import { VariableValues } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { DocumentNode } from 'graphql';
 import { GqlMutation, GqlQuery } from '../generated/graphql';
-import GraphQLResolvers from '../graphql/Resolvers';
-import GraphQLTypeDefs from '../graphql/TypeDefs';
+import GraphQLResolvers from '../graphql/GraphQLResolvers';
+import GraphQLTypeDefs from '../graphql/GraphQLTypeDefs';
 import GraphContext from '../types/GraphContext';
 
 export default function createApolloTestServer(context: Partial<GraphContext>) {
