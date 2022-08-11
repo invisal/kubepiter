@@ -52,7 +52,12 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
 
   async getUserByUsername(username: string): Promise<KubepiterUser> {
     const db = await this.getConnection();
-    return db.collection('users').findOne<KubepiterUser>({ username });
+    const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ username });
+
+    return {
+      ...r,
+      id: r._id.toString(),
+    };
   }
 
   async getUserById(id: string): Promise<KubepiterUser> {
