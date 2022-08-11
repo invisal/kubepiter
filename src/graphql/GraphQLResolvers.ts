@@ -14,6 +14,9 @@ import DeployAppResolver from './resolvers/apps/DeployAppResolver';
 import VersionResolver from './resolvers/VersionResolver';
 import UserResolver from './resolvers/users/UserResolver';
 import CreateUserResolver from './resolvers/users/CreateUserResolver';
+import DeleteUserResolver from './resolvers/users/DeleteUserResolver';
+import UpdateUserResolver from './resolvers/users/UpdateUserResolver';
+import UsersResolver from './resolvers/users/UsersResolver';
 
 const GraphQLResolvers = {
   Query: {
@@ -22,6 +25,7 @@ const GraphQLResolvers = {
     // User
     me: MeResolver,
     user: UserResolver,
+    users: UsersResolver,
 
     apps: AppsResolver,
     app: AppResolver,
@@ -45,6 +49,8 @@ const GraphQLResolvers = {
 
     // User
     createUser: CreateUserResolver,
+    deleteUser: DeleteUserResolver,
+    updateUser: UpdateUserResolver,
   },
 };
 

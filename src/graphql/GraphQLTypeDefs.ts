@@ -19,6 +19,7 @@ const GraphQLTypeDefs = gql`
     # User
     me: User
     user(id: ID!): User
+    users: [User]
   }
 
   type Mutation {

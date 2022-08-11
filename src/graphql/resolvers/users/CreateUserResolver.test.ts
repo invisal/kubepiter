@@ -49,6 +49,6 @@ describe('CreateUserResolver', () => {
 
     const { data } = await mutate(MUTATION_CREATE_USER, { value: USER_TOBE_INSERTED });
     expect(data.createUser.id).toBe(USER_NEW_INSERTED_ID);
-    expect(mockUserInsert.arguments).toBeCalled();
+    expect(mockUserInsert).toBeCalled();
   });
 });

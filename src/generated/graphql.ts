@@ -205,6 +205,7 @@ export type GqlQuery = {
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;
   registries?: Maybe<Array<Maybe<GqlRegistry>>>;
   user?: Maybe<GqlUser>;
+  users?: Maybe<Array<Maybe<GqlUser>>>;
   version?: Maybe<Scalars['String']>;
 };
 
