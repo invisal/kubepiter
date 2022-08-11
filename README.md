@@ -2,4 +2,4 @@
 
 Turning your Kubernetes into an uncomplicated platform as a service (PaaS). Provides your Git repository, it will build and deploy for you.
 
-*NOTICE: Kubepiter is still in early development. Please check our milestone before release. https://github.com/invisal/kubepiter/milestone/1*
+*NOTICE: Kubepiter is still in early development. Please check [our milestone](https://github.com/invisal/kubepiter/milestone/1*) before release.*
