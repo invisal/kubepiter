@@ -97,13 +97,15 @@ async function deployToKube(app: KubepiterApp) {
 
 export function buildPushAndDeploy(db: DatabaseInterface, app: KubepiterApp, deploy: boolean, build: boolean) {
   // Increase version by one
-  const version = app.version + 1;
+  const version = build ? app.version + 1 : app.version;
 
   // Success callback
   const onSuccess = () => {
-    return db.updatePartialAppById(app.id, {
-      version,
-    });
+    if (build) {
+      return db.updatePartialAppById(app.id, {
+        version,
+      });
+    }
   };
 
   if (build) {

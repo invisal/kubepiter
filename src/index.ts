@@ -8,9 +8,10 @@ import { KubepiterUser } from './types/common';
 import { getBuildManager } from './k8s/ImageBuilderManager';
 import getDatabaseConnection from './drivers/databases/DatabaseInstance';
 import KubeMetric from './k8s/KubeMetric';
-import { getKuberneteCore, getKuberneterConfig } from './k8s/getKubernete';
+import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork, getKuberneterConfig } from './k8s/getKubernete';
 import parseTokenFromRequest from './libs/parseTokenFromRequest';
 import { Environment } from './Environment';
+import GraphContext from './types/GraphContext';
 
 const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
@@ -42,7 +43,12 @@ async function startServer() {
         user,
         buildManager,
         metricManager,
-      };
+
+        // Kube
+        k8Api: getKuberneteApi(),
+        k8Core: getKuberneteCore(),
+        k8Network: getKuberneteNetwork(),
+      } as GraphContext;
     },
   });
 

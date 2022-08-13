@@ -194,6 +194,14 @@ export type GqlNodeGroup = {
   tag: Scalars['ID'];
 };
 
+export type GqlPod = {
+  __typename?: 'Pod';
+  name?: Maybe<Scalars['String']>;
+  podScheduledTime?: Maybe<Scalars['String']>;
+  raw?: Maybe<Scalars['JSON']>;
+  status?: Maybe<Scalars['String']>;
+};
+
 export type GqlQuery = {
   __typename?: 'Query';
   app?: Maybe<GqlApp>;
@@ -203,6 +211,9 @@ export type GqlQuery = {
   me?: Maybe<GqlUser>;
   nodeGroups?: Maybe<Array<Maybe<GqlNodeGroup>>>;
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;
+  pod?: Maybe<GqlPod>;
+  podLog?: Maybe<Scalars['String']>;
+  pods?: Maybe<Array<Maybe<GqlPod>>>;
   registries?: Maybe<Array<Maybe<GqlRegistry>>>;
   user?: Maybe<GqlUser>;
   users?: Maybe<Array<Maybe<GqlUser>>>;
@@ -224,6 +235,21 @@ export type GqlQueryBuildLogsArgs = {
   appId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type GqlQueryPodArgs = {
+  name: Scalars['String'];
+};
+
+
+export type GqlQueryPodLogArgs = {
+  name: Scalars['String'];
+};
+
+
+export type GqlQueryPodsArgs = {
+  appId?: InputMaybe<Scalars['String']>;
 };
 
 
