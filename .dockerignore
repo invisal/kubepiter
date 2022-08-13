@@ -2,5 +2,9 @@ node_modules
 .git
 playground
 dist
+
 .env
+.env.development
+.env.test
+
 ca-certificate.crt

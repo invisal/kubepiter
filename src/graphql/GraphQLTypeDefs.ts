@@ -23,7 +23,7 @@ const OtherTypeDefs = gql`
   type Mutation {
     login(username: String!, password: String!, ttl: Int): LoginResponse
     updateApp(id: ID!, value: AppInput): Boolean
-    createApp(id: ID!, value: AppInput): String
+    createApp(name: String!): String
     deployApp(id: ID!, deploy: Boolean = True, build: Boolean = True): DeployResponse
     regenerateAppWebhook(id: ID!): String
   }
