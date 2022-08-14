@@ -7,7 +7,7 @@ import GraphContext from '../../../types/GraphContext';
 import KubepiterError from '../../../types/KubepiterError';
 import { buildDeploymentFromApp, buildServiceFromApp, buildIngressFromApp } from '../../../yaml/YamlBuilder';
 
-async function deployToKube(app: KubepiterApp) {
+export async function deployToKube(app: KubepiterApp) {
   let errorMessage = '';
 
   const deploymentYaml = await buildDeploymentFromApp(app);
@@ -97,13 +97,14 @@ async function deployToKube(app: KubepiterApp) {
 
 export function buildPushAndDeploy(db: DatabaseInterface, app: KubepiterApp, deploy: boolean, build: boolean) {
   // Increase version by one
-  const version = build ? app.version + 1 : app.version;
+  const version = build ? app.version + 1 : app.currentVersion || app.version;
 
   // Success callback
   const onSuccess = () => {
     if (build) {
       return db.updatePartialAppById(app.id, {
         version,
+        currentVersion: version,
       });
     }
   };
@@ -121,7 +122,7 @@ export function buildPushAndDeploy(db: DatabaseInterface, app: KubepiterApp, dep
       (job) => {
         if (deploy) {
           if (job.status === ImageBuildJobStatus.SUCCESS) {
-            deployToKube({ ...app, version })
+            deployToKube({ ...app, currentVersion: version })
               .then(onSuccess)
               .then();
           }

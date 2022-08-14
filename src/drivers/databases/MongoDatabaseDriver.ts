@@ -131,7 +131,12 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   }
 
   async getBuilderSetting(): Promise<KubepiterBuilderSetting> {
-    return (await this.db.collection('setting').findOne<{ value: KubepiterBuilderSetting }>({ name: 'builder' })).value;
+    const buildSetting = await this.db
+      .collection('setting')
+      .findOne<{ value: KubepiterBuilderSetting }>({ name: 'builder' });
+
+    if (!buildSetting) return {};
+    return buildSetting.value;
   }
 
   async updateBuildLog(id: string, log: KubepiterBuildJobLog): Promise<boolean> {

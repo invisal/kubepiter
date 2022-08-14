@@ -2,6 +2,7 @@ import { ImageBuilderOptions, ImageBuildJobStatus } from './ImageBuilderManager'
 import { URL } from 'url';
 import { CoreV1Api, V1PodSpec } from '@kubernetes/client-node';
 import DatabaseInterface from '../drivers/databases/DatabaseInterface';
+import { Environment } from '../Environment';
 
 const POD_BUILDER_NAME = 'kubebox-kaniko-build';
 
@@ -17,7 +18,7 @@ export default async function buildImageAndPush(
   try {
     // Removing the pod
     try {
-      await coreApi.deleteNamespacedPod(POD_BUILDER_NAME, 'default');
+      await coreApi.deleteNamespacedPod(POD_BUILDER_NAME, Environment.DEFAULT_NAMESPACE);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.log('Builder does not exist. No need to remove');
@@ -35,15 +36,14 @@ export default async function buildImageAndPush(
 
     // Create the building pod
     const podDefinition = generateBuilderPodDefinition(options, nodeSelector);
-    await coreApi.createNamespacedPod('default', podDefinition);
+    await coreApi.createNamespacedPod(Environment.DEFAULT_NAMESPACE, podDefinition);
 
     // Waiting until the pod is completed
     while (true) {
       await wait(2000);
 
-      const pod = await coreApi.readNamespacedPod('kubebox-kaniko-build', 'default');
-
-      const podLog = await coreApi.readNamespacedPodLog('kubebox-kaniko-build', 'default');
+      const pod = await coreApi.readNamespacedPod('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
+      const podLog = await coreApi.readNamespacedPodLog('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
 
       if (logCallback) {
         logCallback(podLog.body);
@@ -90,6 +90,7 @@ function generateBuilderPodDefinition(options: ImageBuilderOptions, selector?: V
     },
     spec: {
       ttlSecondsAfterFinished: 60,
+      automountServiceAccountToken: false,
       ...(selector ? { nodeSelector: selector } : {}),
       containers: [
         {

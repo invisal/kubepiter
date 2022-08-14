@@ -21,6 +21,7 @@ export default async function handleDeployApi(
 
   await db.updatePartialAppById(appId, {
     version: app.version,
+    currentVersion: app.version,
   });
 
   buildPushAndDeploy(getDatabaseConnection(), app, true, true);

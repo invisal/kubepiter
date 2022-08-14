@@ -9,14 +9,15 @@ export function buildIngressFromApp(app: KubepiterApp) {
     apiVersion: 'networking.k8s.io/v1',
     kind: 'Ingress',
     metadata: {
-      name: `${app.name}-ingress`,
+      name: `${app.id}-ingress`,
       namespace: Environment.DEFAULT_NAMESPACE,
       labels: {
-        app: app.name,
+        app: app.id,
         'managed-by-kubepiter': 'true',
       },
     },
     spec: {
+      ingressClassName: 'nginx',
       rules: (app.ingress || []).map((ingress) => ({
         host: ingress.host,
         http: {
@@ -26,7 +27,7 @@ export function buildIngressFromApp(app: KubepiterApp) {
               pathType: 'Prefix',
               backend: {
                 service: {
-                  name: `${app.name}-service`,
+                  name: `${app.id}-service`,
                   port: {
                     number: app.port,
                   },
@@ -58,10 +59,10 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
     apiVersion: 'apps/v1',
     kind: 'Deployment',
     metadata: {
-      name: `${app.name}-deployment`,
+      name: `${app.id}-deployment`,
       namespace: Environment.DEFAULT_NAMESPACE,
       labels: {
-        app: app.name,
+        app: app.id,
         'managed-by-kubepiter': 'true',
       },
     },
@@ -69,14 +70,14 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
       replicas: app.replicas || 1,
       selector: {
         matchLabels: {
-          app: app.name,
+          app: app.id,
         },
       },
       template: merge(
         {
           metadata: {
             labels: {
-              app: app.name,
+              app: app.id,
               'managed-by-kubepiter': 'true',
             },
           },
@@ -89,8 +90,8 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
             ],
             containers: [
               {
-                name: app.name,
-                image: `${app.image}:${app.staticVersion || app.version}`,
+                name: app.id,
+                image: `${app.image}:${app.staticVersion || app.currentVersion || app.version}`,
                 ports: [
                   {
                     containerPort: app.port,
@@ -114,14 +115,14 @@ export function buildServiceFromApp(app: KubepiterApp) {
     metadata: {
       labels: {
         'managed-by-kubepiter': 'true',
-        app: app.name,
+        app: app.id,
       },
-      name: `${app.name}-service`,
+      name: `${app.id}-service`,
       namespace: Environment.DEFAULT_NAMESPACE,
     },
     spec: {
       selector: {
-        app: app.name,
+        app: app.id,
       },
       ports: [
         {

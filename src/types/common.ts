@@ -6,8 +6,11 @@ export interface KubepiterApp {
   name: string;
   namespace?: string;
   image: string;
+
   version: number;
+  currentVersion?: number;
   staticVersion: string;
+
   port: number;
   replicas?: number;
   imagePullSecret?: string;

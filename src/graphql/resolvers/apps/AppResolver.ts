@@ -10,6 +10,7 @@ export default async function AppResolver(_, { id }: { id: string }, ctx: GraphC
     return {
       ...app,
       gitWebhook: `${Environment.BASE_URL}/webhook/${app.id}/${app.webhookToken}`,
+      currentVersion: app.currentVersion || app.version,
       git: app.git
         ? {
             ...app.git,

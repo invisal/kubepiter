@@ -1,7 +1,7 @@
-import { Environment } from '../../Environment';
-import { getKuberneteCore } from '../../k8s/getKubernete';
-import GraphContext from '../../types/GraphContext';
-import KubepiterError from '../../types/KubepiterError';
+import { Environment } from '../../../Environment';
+import { getKuberneteCore } from '../../../k8s/getKubernete';
+import GraphContext from '../../../types/GraphContext';
+import KubepiterError from '../../../types/KubepiterError';
 
 export default async function RegistriesResolver(_, __, ctx: GraphContext) {
   if (!ctx.user) throw new KubepiterError.NoPermission();

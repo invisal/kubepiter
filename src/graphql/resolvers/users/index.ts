@@ -6,7 +6,7 @@ import UpdateUserResolver from './UpdateUserResolver';
 import UserResolver from './UserResolver';
 import UsersResolver from './UsersResolver';
 
-export const AppSchemas = gql`
+export const UserSchemas = gql`
   extend type Query {
     me: User
     user(id: ID!): User
@@ -35,7 +35,7 @@ export const AppSchemas = gql`
   }
 `;
 
-export const AppResolvers = {
+export const UserResolvers = {
   Query: { me: MeResolver, user: UserResolver, users: UsersResolver },
   Mutation: { createUser: CreateUserResolver, deleteUser: DeleteUserResolver, updateUser: UpdateUserResolver },
 };

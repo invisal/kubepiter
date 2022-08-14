@@ -16,6 +16,7 @@ export type Scalars = {
 export type GqlApp = {
   __typename?: 'App';
   cluster?: Maybe<Scalars['String']>;
+  currentVersion?: Maybe<Scalars['Int']>;
   env?: Maybe<Array<Maybe<GqlAppEnvironmentVariable>>>;
   folderName?: Maybe<Scalars['String']>;
   git?: Maybe<GqlAppGit>;
@@ -130,24 +131,36 @@ export type GqlLoginResponse = {
 export type GqlMutation = {
   __typename?: 'Mutation';
   createApp?: Maybe<Scalars['String']>;
+  createRegistry?: Maybe<Scalars['String']>;
   createUser?: Maybe<GqlCreateUserResponse>;
+  deleteRegistry?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Boolean']>;
   deployApp?: Maybe<GqlDeployResponse>;
   login?: Maybe<GqlLoginResponse>;
   regenerateAppWebhook?: Maybe<Scalars['String']>;
+  rollbackApp?: Maybe<Scalars['Boolean']>;
   updateApp?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type GqlMutationCreateAppArgs = {
-  id: Scalars['ID'];
-  value?: InputMaybe<GqlAppInput>;
+  name: Scalars['String'];
+};
+
+
+export type GqlMutationCreateRegistryArgs = {
+  value?: InputMaybe<GqlRegistryInput>;
 };
 
 
 export type GqlMutationCreateUserArgs = {
   value: GqlUserInput;
+};
+
+
+export type GqlMutationDeleteRegistryArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -172,6 +185,12 @@ export type GqlMutationLoginArgs = {
 
 export type GqlMutationRegenerateAppWebhookArgs = {
   id: Scalars['ID'];
+};
+
+
+export type GqlMutationRollbackAppArgs = {
+  appId: Scalars['ID'];
+  version?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -245,6 +264,7 @@ export type GqlQueryPodArgs = {
 
 export type GqlQueryPodLogArgs = {
   name: Scalars['String'];
+  tailLines?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -262,6 +282,13 @@ export type GqlRegistry = {
   auth?: Maybe<Scalars['String']>;
   managed?: Maybe<Scalars['Boolean']>;
   name: Scalars['ID'];
+};
+
+export type GqlRegistryInput = {
+  endpoint?: InputMaybe<Scalars['String']>;
+  name: Scalars['ID'];
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type GqlResourceUsage = {

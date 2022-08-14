@@ -8,6 +8,7 @@ export default async function AppsResolver(_, __, ctx: GraphContext) {
   return apps.map((app) => ({
     ...app,
     gitWebhook: `${Environment.BASE_URL}/webhook/${app.id}/${app.webhookToken}`,
+    currentVersion: app.currentVersion || app.version,
     lastBuildJob: () => {
       const job = ctx.buildManager.getLastJobFromAppId(app.name);
       if (!job) return null;
