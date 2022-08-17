@@ -47,6 +47,17 @@ export const AppSchemas = gql`
     yamlService: String
 
     gitWebhook: String
+    resources: AppResource
+  }
+
+  type AppResource {
+    requests: AppResourceQuota
+    limits: AppResourceQuota
+  }
+
+  type AppResourceQuota {
+    memory: String
+    cpu: String
   }
 
   type AppIngress {

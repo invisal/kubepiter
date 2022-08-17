@@ -91,6 +91,7 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
             containers: [
               {
                 name: app.id,
+                resources: app.resources,
                 image: `${app.image}:${app.staticVersion || app.currentVersion || app.version}`,
                 ports: [
                   {

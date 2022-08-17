@@ -15,6 +15,9 @@ export default async function buildImageAndPush(
   logs: string;
   status: ImageBuildJobStatus;
 }> {
+  let responseStatus = ImageBuildJobStatus.FAILED;
+  let responseLog = '';
+
   try {
     // Removing the pod
     try {
@@ -43,24 +46,31 @@ export default async function buildImageAndPush(
       await wait(2000);
 
       const pod = await coreApi.readNamespacedPod('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
-      const podLog = await coreApi.readNamespacedPodLog('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
 
-      if (logCallback) {
-        logCallback(podLog.body);
-      }
+      // Getting the log
+      try {
+        const podLog = await coreApi.readNamespacedPodLog('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
+        responseLog = podLog.body;
+        if (logCallback) {
+          logCallback(podLog.body);
+        }
+      } catch {}
 
       const status = pod.body.status.phase;
-      if (status === 'Succeeded' || status === 'Failed') {
-        return {
-          logs: podLog.body,
-          status: status === 'Succeeded' ? ImageBuildJobStatus.SUCCESS : ImageBuildJobStatus.FAILED,
-        };
+      if (status === 'Succeeded') {
+        responseStatus = ImageBuildJobStatus.SUCCESS;
+        break;
+      } else if (status === 'Failed') {
+        responseStatus = ImageBuildJobStatus.FAILED;
+        responseLog = `${pod.body.status.reason}\r\n${pod.body.status.message}`;
+        break;
       }
     }
   } catch (e) {
     console.error(e);
-    return { status: ImageBuildJobStatus.FAILED, logs: '' };
   }
+
+  return { status: responseStatus, logs: responseLog };
 }
 
 function wait(n: number) {

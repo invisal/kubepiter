@@ -1,4 +1,4 @@
-import { V1Ingress, V1PodSpec } from '@kubernetes/client-node';
+import { V1Ingress, V1PodSpec, V1ResourceRequirements } from '@kubernetes/client-node';
 import { ImageBuildJobStatus } from '../k8s/ImageBuilderManager';
 
 export interface KubepiterApp {
@@ -23,9 +23,13 @@ export interface KubepiterApp {
   nodeGroup?: string;
   folderName?: string;
 
+  // For override the pod template
   template?: unknown;
+
   webhookToken?: string;
   ingressOverride?: V1Ingress;
+
+  resources?: V1ResourceRequirements;
 
   git?: {
     url: string;
