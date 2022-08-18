@@ -31,6 +31,7 @@ export type GqlApp = {
   nodeGroup?: Maybe<Scalars['String']>;
   port?: Maybe<Scalars['Int']>;
   replicas?: Maybe<Scalars['Int']>;
+  resources?: Maybe<GqlAppResource>;
   staticVersion?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['Int']>;
   yamlDeployment?: Maybe<Scalars['String']>;
@@ -87,8 +88,31 @@ export type GqlAppInput = {
   nodeGroup?: InputMaybe<Scalars['String']>;
   port?: InputMaybe<Scalars['Int']>;
   replicas?: InputMaybe<Scalars['Int']>;
+  resources?: InputMaybe<GqlAppResourceInput>;
   staticVersion?: InputMaybe<Scalars['String']>;
   version?: InputMaybe<Scalars['Int']>;
+};
+
+export type GqlAppResource = {
+  __typename?: 'AppResource';
+  limits?: Maybe<GqlAppResourceQuota>;
+  requests?: Maybe<GqlAppResourceQuota>;
+};
+
+export type GqlAppResourceInput = {
+  limits?: InputMaybe<GqlAppResourceQuotaInput>;
+  requests?: InputMaybe<GqlAppResourceQuotaInput>;
+};
+
+export type GqlAppResourceQuota = {
+  __typename?: 'AppResourceQuota';
+  cpu?: Maybe<Scalars['Float']>;
+  memory?: Maybe<Scalars['Int']>;
+};
+
+export type GqlAppResourceQuotaInput = {
+  cpu?: InputMaybe<Scalars['Float']>;
+  memory?: InputMaybe<Scalars['Int']>;
 };
 
 export type GqlBuildJob = {

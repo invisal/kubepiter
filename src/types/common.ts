@@ -1,4 +1,5 @@
-import { V1Ingress, V1PodSpec, V1ResourceRequirements } from '@kubernetes/client-node';
+import { V1Ingress, V1PodSpec } from '@kubernetes/client-node';
+import { GqlAppResource } from '../generated/graphql';
 import { ImageBuildJobStatus } from '../k8s/ImageBuilderManager';
 
 export interface KubepiterApp {
@@ -29,7 +30,7 @@ export interface KubepiterApp {
   webhookToken?: string;
   ingressOverride?: V1Ingress;
 
-  resources?: V1ResourceRequirements;
+  resources?: GqlAppResource | null;
 
   git?: {
     url: string;

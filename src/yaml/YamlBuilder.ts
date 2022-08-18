@@ -3,6 +3,7 @@ import _, { merge } from 'lodash';
 import { V1Deployment, V1PodSpec } from '@kubernetes/client-node';
 import { Environment } from '../Environment';
 import getDatabaseConnection from '../drivers/databases/DatabaseInstance';
+import convertAppResourceToKube from '../libs/convertAppResourceToKube';
 
 export function buildIngressFromApp(app: KubepiterApp) {
   const ingress = {
@@ -55,6 +56,8 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
     }
   }
 
+  const resources = convertAppResourceToKube(app.resources);
+
   return {
     apiVersion: 'apps/v1',
     kind: 'Deployment',
@@ -91,7 +94,7 @@ export async function buildDeploymentFromApp(app: KubepiterApp): Promise<V1Deplo
             containers: [
               {
                 name: app.id,
-                resources: app.resources,
+                ...(resources ? { resources } : {}),
                 image: `${app.image}:${app.staticVersion || app.currentVersion || app.version}`,
                 ports: [
                   {

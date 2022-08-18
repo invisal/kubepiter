@@ -56,8 +56,18 @@ export const AppSchemas = gql`
   }
 
   type AppResourceQuota {
-    memory: String
-    cpu: String
+    memory: Int
+    cpu: Float
+  }
+
+  input AppResourceInput {
+    requests: AppResourceQuotaInput
+    limits: AppResourceQuotaInput
+  }
+
+  input AppResourceQuotaInput {
+    memory: Int
+    cpu: Float
   }
 
   type AppIngress {
@@ -90,6 +100,7 @@ export const AppSchemas = gql`
     imagePullSecret: String
     folderName: String
     nodeGroup: String
+    resources: AppResourceInput
   }
 
   type AppGit {
