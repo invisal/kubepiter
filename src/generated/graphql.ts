@@ -154,6 +154,7 @@ export type GqlLoginResponse = {
 
 export type GqlMutation = {
   __typename?: 'Mutation';
+  changePassword?: Maybe<Scalars['Boolean']>;
   createApp?: Maybe<Scalars['String']>;
   createRegistry?: Maybe<Scalars['String']>;
   createUser?: Maybe<GqlCreateUserResponse>;
@@ -165,6 +166,12 @@ export type GqlMutation = {
   rollbackApp?: Maybe<Scalars['Boolean']>;
   updateApp?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type GqlMutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
 };
 
 

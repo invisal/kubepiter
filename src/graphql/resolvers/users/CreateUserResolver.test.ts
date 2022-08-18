@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-core';
-import bycrypt from 'bcrypt';
 import createApolloTestServer from '../../../test_utility/createApolloTestServer';
 import mockDatabaseInterface from '../../../test_utility/mockDatabaseInterface';
 

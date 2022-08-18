@@ -1,5 +1,5 @@
 import password from 'secure-random-password';
-import bycrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-core';
 import { GqlUserInput } from '../../../generated/graphql';
 import GraphContext from '../../../types/GraphContext';
@@ -11,7 +11,7 @@ export default async function CreateUserResolver(_, { value }: { value: GqlUserI
   const randomPassword = password.randomPassword();
 
   return {
-    id: await ctx.db.insertUser({ ...value, password: bycrypt.hashSync(randomPassword, 12) }),
+    id: await ctx.db.insertUser({ ...value, password: bcrypt.hashSync(randomPassword, 12) }),
     password: randomPassword,
   };
 }

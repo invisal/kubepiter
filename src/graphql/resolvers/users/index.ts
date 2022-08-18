@@ -5,6 +5,7 @@ import DeleteUserResolver from './DeleteUserResolver';
 import UpdateUserResolver from './UpdateUserResolver';
 import UserResolver from './UserResolver';
 import UsersResolver from './UsersResolver';
+import ChangePasswordResolver from './ChangePasswordResolver';
 
 export const UserSchemas = gql`
   extend type Query {
@@ -17,6 +18,7 @@ export const UserSchemas = gql`
     createUser(value: UserInput!): CreateUserResponse
     updateUser(id: ID!, value: UserInput!): Boolean
     deleteUser(id: ID!): Boolean
+    changePassword(oldPassword: String!, newPassword: String!): Boolean
   }
 
   type User {
@@ -37,5 +39,10 @@ export const UserSchemas = gql`
 
 export const UserResolvers = {
   Query: { me: MeResolver, user: UserResolver, users: UsersResolver },
-  Mutation: { createUser: CreateUserResolver, deleteUser: DeleteUserResolver, updateUser: UpdateUserResolver },
+  Mutation: {
+    createUser: CreateUserResolver,
+    deleteUser: DeleteUserResolver,
+    updateUser: UpdateUserResolver,
+    changePassword: ChangePasswordResolver,
+  },
 };
