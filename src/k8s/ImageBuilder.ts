@@ -62,7 +62,7 @@ export default async function buildImageAndPush(
         break;
       } else if (status === 'Failed') {
         responseStatus = ImageBuildJobStatus.FAILED;
-        responseLog = `${pod.body.status.reason}\r\n${pod.body.status.message}`;
+        responseLog = responseLog || `${pod.body.status.reason}\r\n${pod.body.status.message}`;
         break;
       }
     }
