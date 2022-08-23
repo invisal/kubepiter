@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-core';
 import { AppSchemas } from './resolvers/apps';
 import { PodSchemas } from './resolvers/pods';
 import { RegistrySchemas } from './resolvers/registry';
+import { SubscriptionSchemas } from './resolvers/subscriptions/SubscriptionResolvers';
 import { UserSchemas } from './resolvers/users';
 
 const OtherTypeDefs = gql`
@@ -67,5 +68,13 @@ const OtherTypeDefs = gql`
   }
 `;
 
-const GraphQLTypeDefs = mergeTypeDefs([OtherTypeDefs, AppSchemas, UserSchemas, PodSchemas, RegistrySchemas]);
+const GraphQLTypeDefs = mergeTypeDefs([
+  OtherTypeDefs,
+  AppSchemas,
+  UserSchemas,
+  PodSchemas,
+  RegistrySchemas,
+  SubscriptionSchemas,
+]);
+
 export default GraphQLTypeDefs;

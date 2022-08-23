@@ -1,24 +1,24 @@
-import { ImageBuilderManager } from '../k8s/ImageBuilderManager'
+import { ImageBuilderManager } from '../k8s/ImageBuilderManager';
 
 const fakeRunningResponse = {
   body: {
     status: {
-      phase: 'Running'
-    }
-  }
-}
+      phase: 'Running',
+    },
+  },
+};
 
 const fakeSuccessResponse = {
   body: {
     status: {
-      phase: 'Succeeded'
-    }
-  }
-}
+      phase: 'Succeeded',
+    },
+  },
+};
 
 describe('Build Image Queue', () => {
   test('Build image should run all of in queue', async () => {
-    const SUCCESS_LOG_CONTENT = 'Success log'
+    const SUCCESS_LOG_CONTENT = 'Success log';
 
     const coreApi = {
       readNamespacedPod: jest
@@ -32,21 +32,19 @@ describe('Build Image Queue', () => {
 
       createNamespacedPod: jest.fn(),
       deleteNamespacedPod: jest.fn(),
-      readNamespacedPodLog: jest
-        .fn()
-        .mockResolvedValue({ body: SUCCESS_LOG_CONTENT })
-    }
+      readNamespacedPodLog: jest.fn().mockResolvedValue({ body: SUCCESS_LOG_CONTENT }),
+    };
 
     const db = {
       getBuilderSetting: jest.fn().mockResolvedValue({}),
       insertBuildLog: jest.fn(),
-      updateBuildLog: jest.fn()
-    }
+      updateBuildLog: jest.fn(),
+    };
 
-    const mockCallback01 = jest.fn()
-    const mockCallback02 = jest.fn()
+    const mockCallback01 = jest.fn();
+    const mockCallback02 = jest.fn();
 
-    const builderQueue = new ImageBuilderManager(coreApi as any, db as any)
+    const builderQueue = new ImageBuilderManager(coreApi as any, db as any, () => {});
 
     builderQueue.create(
       {
@@ -54,16 +52,16 @@ describe('Build Image Queue', () => {
           url: 'https://google.com',
           branch: 'master',
           username: 'name',
-          password: 'password'
+          password: 'password',
         },
         imagePullSecret: 'test',
         appId: 'test',
         image: 'invisal/hello-world',
         version: '1',
-        args: []
+        args: [],
       },
-      mockCallback01
-    )
+      mockCallback01,
+    );
 
     builderQueue.create(
       {
@@ -71,25 +69,25 @@ describe('Build Image Queue', () => {
           url: 'https://yahoo.com',
           branch: 'master',
           username: 'name',
-          password: 'password'
+          password: 'password',
         },
         imagePullSecret: 'test',
         appId: 'test2',
         image: 'invisal/hello-foo',
         version: '1',
-        args: []
+        args: [],
       },
-      mockCallback02
-    )
+      mockCallback02,
+    );
 
     // Wait for 40 seconds
-    let retryAttemptLeft = 10
+    let retryAttemptLeft = 10;
     while (--retryAttemptLeft >= 0) {
-      await new Promise((r) => setTimeout(r, 4000))
-      if (builderQueue.getQueue().length === 0) break
+      await new Promise((r) => setTimeout(r, 4000));
+      if (builderQueue.getQueue().length === 0) break;
     }
 
-    expect(mockCallback01).toBeCalled()
-    expect(mockCallback02).toBeCalled()
-  }, 40000)
-})
+    expect(mockCallback01).toBeCalled();
+    expect(mockCallback02).toBeCalled();
+  }, 40000);
+});

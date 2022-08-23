@@ -12,6 +12,9 @@ import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork, getKuberneterCo
 import parseTokenFromRequest from './libs/parseTokenFromRequest';
 import { Environment } from './Environment';
 import GraphContext from './types/GraphContext';
+import setupSubscription from './core/setupSubscription';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
@@ -19,12 +22,28 @@ const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
 async function startServer() {
   const app = express();
   const httpServer = http.createServer(app);
+  const schema = makeExecutableSchema({ typeDefs: GraphQLTypeDefs, resolvers: GraphQLResolvers });
+  const serverCleanup = setupSubscription(httpServer, schema);
 
   const server = new ApolloServer({
     typeDefs: GraphQLTypeDefs,
     resolvers: GraphQLResolvers,
     csrfPrevention: true,
+    plugins: [
+      // Proper shutdown for the HTTP server.
+      ApolloServerPluginDrainHttpServer({ httpServer }),
 
+      // Proper shutdown for the WebSocket server.
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await serverCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
     context: async ({ req }) => {
       const db = getDatabaseConnection();
       const token = parseTokenFromRequest(req);
