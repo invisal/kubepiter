@@ -11,13 +11,14 @@ export default class GithubWebhookParser extends GitWebhookParserInterface {
       req.headers['content-type'] === 'application/json' ? req.body : JSON.parse(req.body.payload);
 
     // Parsing branch
-    const branch = body.ref.split('/').pop();
+    let branch = '';
 
     // Parsing event
     const originalEvent = req.headers['x-github-event'] as string;
     let event: GitWebhookEvent;
     if (originalEvent.toLowerCase() === 'push') {
       event = GitWebhookEvent.PUSH;
+      branch = body.ref.split('/').pop();
     }
 
     return {
