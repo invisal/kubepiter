@@ -1,20 +1,18 @@
-import express from 'express'
-import handleDeployApi from './deploy'
-import handleGitWebhook from './handleGitWebhook'
+import express from 'express';
+import handleDeployApp from './handleDeployApp';
+import handleGenerateBuildCommand from './handleGenerateBuildCommand';
+import handleGitWebhook from './handleGitWebhook';
 
-export default function setupApis (app: express.Application) {
-  const asyncHandler =
-    (fn: express.RequestHandler) =>
-      (req: express.Request, res: express.Response, next: express.NextFunction) =>
-        Promise.resolve(fn(req, res, next)).catch(next)
+export default function setupApis(app: express.Application) {
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-  app.use(express.json())
-  app.use(express.urlencoded({ extended: true }))
+  app.get('/app/generate_build/:app_id/:token', handleGenerateBuildCommand);
+  app.post('/app/deploy/:app_id/:token', handleDeployApp);
 
-  app.all('/app/deploy/:app_id/:token', asyncHandler(handleDeployApi))
-  app.all('/webhook/:app_id/:token', handleGitWebhook)
+  app.all('/webhook/:app_id/:token', handleGitWebhook);
 
   app.use((err: Error, req: express.Request, res: express.Response) => {
-    return res.status(500).json({ error: { message: err.message } })
-  })
+    return res.status(500).json({ error: { message: err.message } });
+  });
 }
