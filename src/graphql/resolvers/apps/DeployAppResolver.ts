@@ -8,6 +8,7 @@ import GraphContext from '../../../types/GraphContext';
 import KubepiterError from '../../../types/KubepiterError';
 import { buildDeploymentFromApp, buildServiceFromApp, buildIngressFromApp } from '../../../yaml/YamlBuilder';
 import yaml from 'yaml';
+import { extractAppConfigurationFromApp } from 'src/libs/appConfiguration';
 
 export async function deployToKube(app: KubepiterApp) {
   const db = getDatabaseConnection();
@@ -118,6 +119,10 @@ export async function deployToKube(app: KubepiterApp) {
     serviceSuccess,
     serviceYaml: yaml.stringify(serviceYaml),
     createdAt: Math.floor(Date.now() / 1000),
+  });
+
+  await db.updatePartialAppById(app.id, {
+    lastConfig: extractAppConfigurationFromApp(app),
   });
 
   return {};

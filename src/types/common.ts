@@ -2,7 +2,19 @@ import { V1Ingress, V1PodSpec } from '@kubernetes/client-node';
 import { GqlAppResource } from '../generated/graphql';
 import { ImageBuildJobStatus } from '../k8s/ImageBuilderManager';
 
-export interface KubepiterApp {
+export interface KubepiterAppConfig {
+  resources?: GqlAppResource | null;
+  nodeGroup?: string;
+  ingress: {
+    host: string;
+    path: string;
+  }[];
+  env?: { name: string; value: string }[];
+  port: number;
+  replicas?: number;
+}
+
+export interface KubepiterApp extends KubepiterAppConfig {
   id: string;
   name: string;
   namespace?: string;
@@ -12,16 +24,7 @@ export interface KubepiterApp {
   currentVersion?: number;
   staticVersion: string;
 
-  port: number;
-  replicas?: number;
   imagePullSecret?: string;
-  ingress: {
-    host: string;
-    path: string;
-  }[];
-  env?: { name: string; value: string }[];
-
-  nodeGroup?: string;
   folderName?: string;
 
   // For override the pod template
@@ -30,14 +33,14 @@ export interface KubepiterApp {
   webhookToken?: string;
   ingressOverride?: V1Ingress;
 
-  resources?: GqlAppResource | null;
-
   git?: {
     url: string;
     branch: string;
     username?: string;
     password?: string;
   };
+
+  lastConfig: KubepiterAppConfig;
 }
 
 export interface KubepiterUser {
