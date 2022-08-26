@@ -7,8 +7,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "outDir": "./dist",
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": "."
   },
