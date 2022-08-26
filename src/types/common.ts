@@ -76,6 +76,7 @@ export interface KubepiterDeploymentLog {
   deploymentYaml: string;
   deploymentSuccess: boolean;
   deploymentResponse: string;
+  createdAt: number;
 }
 
 export interface KubepiterBuildJobLog {

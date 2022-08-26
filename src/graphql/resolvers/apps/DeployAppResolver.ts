@@ -1,4 +1,5 @@
 import * as k8s from '@kubernetes/client-node';
+import getDatabaseConnection from '../../../drivers/databases/DatabaseInstance';
 import DatabaseInterface from '../../../drivers/databases/DatabaseInterface';
 import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork } from '../../../k8s/getKubernete';
 import { getBuildManager, ImageBuildJobStatus } from '../../../k8s/ImageBuilderManager';
@@ -6,10 +7,10 @@ import { KubepiterApp } from '../../../types/common';
 import GraphContext from '../../../types/GraphContext';
 import KubepiterError from '../../../types/KubepiterError';
 import { buildDeploymentFromApp, buildServiceFromApp, buildIngressFromApp } from '../../../yaml/YamlBuilder';
+import yaml from 'yaml';
 
 export async function deployToKube(app: KubepiterApp) {
-  let errorMessage = '';
-
+  const db = getDatabaseConnection();
   const deploymentYaml = await buildDeploymentFromApp(app);
   const serviceYaml = buildServiceFromApp(app);
   const ingressYaml = buildIngressFromApp(app);
@@ -17,6 +18,13 @@ export async function deployToKube(app: KubepiterApp) {
   const k8sApp = getKuberneteApi();
   const k8sApi = getKuberneteCore();
   const k8sNetwork = getKuberneteNetwork();
+
+  let ingressSuccess = null;
+  let serviceSuccess = null;
+  let deploymentSuccess = null;
+  let ingressResponse = '';
+  let serviceResponse = '';
+  let deploymentResponse = '';
 
   try {
     if (app.version > 1) {
@@ -34,12 +42,14 @@ export async function deployToKube(app: KubepiterApp) {
           },
         },
       );
+      deploymentSuccess = true;
     } else {
       await k8sApp.createNamespacedDeployment(deploymentYaml.metadata.namespace, deploymentYaml);
+      deploymentSuccess = true;
     }
   } catch (e) {
-    console.error(e);
-    errorMessage += e.message;
+    deploymentSuccess = false;
+    deploymentResponse = e.message;
   }
 
   try {
@@ -58,12 +68,14 @@ export async function deployToKube(app: KubepiterApp) {
           },
         },
       );
+      serviceSuccess = true;
     } else {
       await k8sApi.createNamespacedService(serviceYaml.metadata.namespace, serviceYaml);
+      serviceSuccess = true;
     }
   } catch (e) {
-    console.error(e);
-    errorMessage += e.message;
+    serviceSuccess = false;
+    serviceResponse = e.message;
   }
 
   try {
@@ -82,17 +94,33 @@ export async function deployToKube(app: KubepiterApp) {
           },
         },
       );
+      ingressSuccess = true;
     } else {
       await k8sNetwork.createNamespacedIngress(ingressYaml.metadata.namespace, ingressYaml);
+      ingressSuccess = true;
     }
   } catch (e) {
-    console.error(e);
-    errorMessage += e.message;
+    ingressSuccess = false;
+    ingressResponse = e.message;
   }
 
-  return {
-    message: errorMessage,
-  };
+  await db.insertDeploymentLog({
+    appId: app.id,
+    deploymentResponse,
+    deploymentYaml: yaml.stringify(deploymentYaml, {
+      version: '1.1',
+    }),
+    deploymentSuccess,
+    ingressResponse,
+    ingressSuccess,
+    ingressYaml: yaml.stringify(ingressYaml),
+    serviceResponse,
+    serviceSuccess,
+    serviceYaml: yaml.stringify(serviceYaml),
+    createdAt: Math.floor(Date.now() / 1000),
+  });
+
+  return {};
 }
 
 export function buildPushAndDeploy(db: DatabaseInterface, app: KubepiterApp, deploy: boolean, build: boolean) {
