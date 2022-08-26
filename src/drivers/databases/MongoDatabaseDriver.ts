@@ -6,6 +6,7 @@ import {
   KubepiterNodeGroup,
   KubepiterApp,
   KubepiterUser,
+  KubepiterDeploymentLog,
 } from '../../types/common';
 import DatabaseInterface from './DatabaseInterface';
 
@@ -171,7 +172,38 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   }
 
   async insertBuildLog(log: KubepiterBuildJobLog): Promise<string> {
-    await this.db.collection('build_logs').insertOne(log);
+    const db = await this.getConnection();
+    await db.collection('build_logs').insertOne(log);
     return log.id;
+  }
+
+  // Deployment Log
+  async insertDeploymentLog(log: Partial<KubepiterDeploymentLog>): Promise<string> {
+    const db = await this.getConnection();
+    const result = await db.collection('deployment_logs').insertOne(log);
+    return result.insertedId.toString();
+  }
+
+  async getDeploymentLog(id: string): Promise<KubepiterDeploymentLog> {
+    const db = await this.getConnection();
+    return await db.collection('deployment_logs').findOne<KubepiterDeploymentLog>({ _id: new ObjectId(id) });
+  }
+
+  async getDeploymentLogList(
+    condition: { appId?: string },
+    offset: number,
+    limit: number,
+  ): Promise<KubepiterDeploymentLog[]> {
+    const db = await this.getConnection();
+    const cursor = db
+      .collection<KubepiterDeploymentLog>('deployment_logs')
+      .find(condition?.appId ? condition : undefined)
+      .sort({
+        createdAt: -1,
+      })
+      .skip(offset)
+      .limit(limit);
+
+    return cursor.toArray();
   }
 }

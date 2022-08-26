@@ -5,6 +5,7 @@ import {
   KubepiterNodeGroup,
   KubepiterApp,
   KubepiterUser,
+  KubepiterDeploymentLog,
 } from '../../types/common';
 
 export default abstract class DatabaseInterface {
@@ -30,7 +31,6 @@ export default abstract class DatabaseInterface {
   abstract getNodeGroup(tag: string): Promise<KubepiterNodeGroup>;
   abstract getNodeGroupList(): Promise<KubepiterNodeGroup[]>;
 
-  // Setting
   abstract insertBuildLog(log: KubepiterBuildJobLog): Promise<string>;
   abstract updateBuildLog(id: string, log: KubepiterBuildJobLog): Promise<boolean>;
 
@@ -41,5 +41,15 @@ export default abstract class DatabaseInterface {
     limit: number,
   ): Promise<KubepiterBuildJobLog[]>;
 
+  // Deployment Log
+  abstract insertDeploymentLog(value: Partial<KubepiterDeploymentLog>): Promise<string>;
+  abstract getDeploymentLog(id: string): Promise<KubepiterDeploymentLog>;
+  abstract getDeploymentLogList(
+    condition: { appId?: string },
+    offset: number,
+    limit: number,
+  ): Promise<KubepiterDeploymentLog[]>;
+
+  // Setting
   abstract getBuilderSetting(): Promise<KubepiterBuilderSetting>;
 }

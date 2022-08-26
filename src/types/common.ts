@@ -64,6 +64,20 @@ export interface KubepiterBuilderSetting {
   nodeGroup?: string;
 }
 
+export interface KubepiterDeploymentLog {
+  id: string;
+  appId: string;
+  ingressYaml: string;
+  ingressSuccess: boolean;
+  ingressResponse: string;
+  serviceYaml: string;
+  serviceSuccess: boolean;
+  serviceResponse: string;
+  deploymentYaml: string;
+  deploymentSuccess: boolean;
+  deploymentResponse: string;
+}
+
 export interface KubepiterBuildJobLog {
   id: string;
   appId: string;
