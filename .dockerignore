@@ -3,6 +3,7 @@ node_modules
 playground
 dist
 assets
+coverage
 
 .env
 .env.development
