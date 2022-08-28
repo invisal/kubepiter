@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kubepiter-cluster-binding
+subjects:
+  - kind: ServiceAccount
+    namespace: kubepiter
+    name: kubepiter-account
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kubepiter-cluster-roles

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubepiter-core
+  namespace: kubepiter
+  labels:
+    app: kubepiter-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubepiter-core
+  template:
+    metadata:
+      labels:
+        app: kubepiter-core
+    spec:
+      serviceAccount: kubepiter-account
+      containers:
+        - name: kubepiter-core
+          image: invisal/kubepiter:0.0.1
+          ports:
+            - containerPort: 80
+          env:
+            - name: MONGO_CONNECTION_STRING
+              value: { MONGODB_CONNECTION_STRING }
+            - name: MONGO_DB
+              value: kubepiter
+            - name: BASE_URL
+              value: https://example.com
+            - name: PORT
+              value: '80'
