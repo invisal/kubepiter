@@ -21,6 +21,7 @@ export type GqlApp = {
   folderName?: Maybe<Scalars['String']>;
   git?: Maybe<GqlAppGit>;
   gitWebhook?: Maybe<Scalars['String']>;
+  hasChanged?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['ID']>;
   image?: Maybe<Scalars['String']>;
   imagePullSecret?: Maybe<Scalars['String']>;
@@ -329,6 +330,11 @@ export type GqlResourceUsage = {
   limit?: Maybe<Scalars['Float']>;
   request?: Maybe<Scalars['Float']>;
   usage?: Maybe<Scalars['Float']>;
+};
+
+export type GqlSubscription = {
+  __typename?: 'Subscription';
+  buildQueueChanged?: Maybe<Array<Maybe<GqlBuildJob>>>;
 };
 
 export type GqlUser = {

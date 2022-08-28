@@ -1,3 +1,4 @@
+import { extractAppConfigurationFromApp, sameAppConfiguration } from 'src/libs/appConfiguration';
 import { Environment } from '../../../Environment';
 import GraphContext from '../../../types/GraphContext';
 import KubepiterError from '../../../types/KubepiterError';
@@ -11,6 +12,7 @@ export default async function AppResolver(_, { id }: { id: string }, ctx: GraphC
       ...app,
       gitWebhook: `${Environment.BASE_URL}/webhook/${app.id}/${app.webhookToken}`,
       currentVersion: app.currentVersion || app.version,
+      hasChanged: () => !sameAppConfiguration(extractAppConfigurationFromApp(app), app.lastConfig),
       git: app.git
         ? {
             ...app.git,

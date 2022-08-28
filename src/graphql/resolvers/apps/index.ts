@@ -48,6 +48,8 @@ export const AppSchemas = gql`
 
     gitWebhook: String
     resources: AppResource
+
+    hasChanged: Boolean
   }
 
   type AppResource {
