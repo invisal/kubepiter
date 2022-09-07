@@ -16,7 +16,6 @@ interface RegistryTagList {
   tags: string[];
 }
 
-// 'Bearer realm="https://api.digitalocean.com/v2/registry/auth",service="registry.digitalocean.com",scope="registry:catalog:*"'
 export function parseWwwAuthenticate(text: string): Record<string, string> {
   if (text.substring(0, 'Bearer '.length) !== 'Bearer ') {
     throw new Error('Invalid authenticate header');
@@ -92,7 +91,7 @@ export default class RegistryClient {
       },
     });
 
-    if (responseRetry.status >= 200 && responseRetry.status < 300) {
+    if (responseRetry.status < 200 || responseRetry.status >= 300) {
       throw new Error(responseRetry.statusText);
     }
 
