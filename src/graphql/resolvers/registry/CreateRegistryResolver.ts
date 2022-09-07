@@ -1,9 +1,9 @@
 import { UserInputError } from 'apollo-server-core';
-import { Environment } from '../../../Environment';
-import { GqlRegistryInput } from '../../../generated/graphql';
-import KubeHelper from '../../../libs/KubeHelper';
-import GraphContext from '../../../types/GraphContext';
-import KubepiterError from '../../../types/KubepiterError';
+import { Environment } from 'src/Environment';
+import { GqlRegistryInput } from 'src/generated/graphql';
+import KubeHelper from 'src/libs/KubeHelper';
+import GraphContext from 'src/types/GraphContext';
+import KubepiterError from 'src/types/KubepiterError';
 
 export default async function CreateRegistryResolver(_, { value }: { value: GqlRegistryInput }, ctx: GraphContext) {
   if (!ctx.user) throw new KubepiterError.NoPermission();
@@ -27,15 +27,23 @@ export default async function CreateRegistryResolver(_, { value }: { value: GqlR
     },
   };
 
+  const annotations: Record<string, string> = {};
+  if (value.urlPrefix) {
+    annotations['kubepiter-prefix'] = value.urlPrefix;
+  }
+
   await ctx.k8Core.createNamespacedSecret(Environment.DEFAULT_NAMESPACE, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
       name: value.name,
+      annotations: Object.keys(annotations).length > 0 ? annotations : undefined,
     },
     type: 'kubernetes.io/dockerconfigjson',
     data: {
       '.dockerconfigjson': Buffer.from(JSON.stringify(config)).toString('base64'),
     },
   });
+
+  return true;
 }

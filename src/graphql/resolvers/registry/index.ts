@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-core';
 import CreateRegistryResolver from './CreateRegistryResolver';
 import RegistriesResolver from './RegistriesResolver';
 import RegistryReposResolver from './RegistryReposResolver';
+import UpdateRegistryResolver from './UpdateRegistryResolver';
 
 export const RegistrySchemas = gql`
   extend type Query {
@@ -13,12 +14,15 @@ export const RegistrySchemas = gql`
 
   extend type Mutation {
     createRegistry(value: RegistryInput): String
+    updateRegistry(name: String!, value: RegistryInput): Boolean
     deleteRegistry(name: String!): Boolean
   }
 
   type Registry {
     name: ID!
     auth: String
+    endpoint: String
+    urlPrefix: String
     managed: Boolean
   }
 
@@ -42,10 +46,11 @@ export const RegistrySchemas = gql`
   }
 
   input RegistryInput {
-    name: ID!
+    name: ID
     endpoint: String
     username: String
     password: String
+    urlPrefix: String
   }
 `;
 
@@ -56,5 +61,6 @@ export const RegistryResolvers = {
   },
   Mutation: {
     createRegistry: CreateRegistryResolver,
+    updateRegistry: UpdateRegistryResolver,
   },
 };

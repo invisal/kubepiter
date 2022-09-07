@@ -1,3 +1,4 @@
+import { parseRegistrySecret } from 'src/libs/parseRegistrySecret';
 import { Environment } from '../../../Environment';
 import { getKuberneteCore } from '../../../k8s/getKubernete';
 import GraphContext from '../../../types/GraphContext';
@@ -12,11 +13,13 @@ export default async function RegistriesResolver(_, __, ctx: GraphContext) {
   const registries = res.body.items.filter((item) => item.type === 'kubernetes.io/dockerconfigjson');
 
   return registries.map((registry) => {
-    const parseData = JSON.parse(Buffer.from(registry.data['.dockerconfigjson'], 'base64').toString('ascii'));
+    const { endpoint } = parseRegistrySecret(registry);
 
     return {
       name: registry.metadata.name,
-      auth: Object.keys(parseData.auths)[0],
+      auth: endpoint,
+      endpoint,
+      urlPrefix: (registry.metadata?.annotations || {})['kubepiter-prefix'],
       managed: Object.keys(registry.metadata.labels || {}).indexOf('managed-by-kubepiter') >= 0,
     };
   });

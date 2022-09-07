@@ -266,6 +266,9 @@ export type GqlQuery = {
   podLog?: Maybe<Scalars['String']>;
   pods?: Maybe<Array<Maybe<GqlPod>>>;
   registries?: Maybe<Array<Maybe<GqlRegistry>>>;
+  registryManifest?: Maybe<GqlRegistryManifest>;
+  registryRepoTags?: Maybe<Array<Maybe<GqlRegistryRepositoryTag>>>;
+  registryRepos?: Maybe<Array<Maybe<GqlRegistryRepository>>>;
   user?: Maybe<GqlUser>;
   users?: Maybe<Array<Maybe<GqlUser>>>;
   version?: Maybe<Scalars['String']>;
@@ -305,6 +308,24 @@ export type GqlQueryPodsArgs = {
 };
 
 
+export type GqlQueryRegistryManifestArgs = {
+  registryName: Scalars['String'];
+  repositoryName: Scalars['String'];
+  tag?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GqlQueryRegistryRepoTagsArgs = {
+  registryName: Scalars['String'];
+  repositoryName: Scalars['String'];
+};
+
+
+export type GqlQueryRegistryReposArgs = {
+  registryName: Scalars['String'];
+};
+
+
 export type GqlQueryUserArgs = {
   id: Scalars['ID'];
 };
@@ -320,7 +341,31 @@ export type GqlRegistryInput = {
   endpoint?: InputMaybe<Scalars['String']>;
   name: Scalars['ID'];
   password?: InputMaybe<Scalars['String']>;
+  urlPrefix?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
+};
+
+export type GqlRegistryManifest = {
+  __typename?: 'RegistryManifest';
+  contentDiggest?: Maybe<Scalars['String']>;
+  layers?: Maybe<Array<Maybe<GqlRegistryManifestLayer>>>;
+  size?: Maybe<Scalars['Int']>;
+};
+
+export type GqlRegistryManifestLayer = {
+  __typename?: 'RegistryManifestLayer';
+  contentDiggest?: Maybe<Scalars['String']>;
+  size?: Maybe<Scalars['Int']>;
+};
+
+export type GqlRegistryRepository = {
+  __typename?: 'RegistryRepository';
+  name?: Maybe<Scalars['String']>;
+};
+
+export type GqlRegistryRepositoryTag = {
+  __typename?: 'RegistryRepositoryTag';
+  name?: Maybe<Scalars['String']>;
 };
 
 export type GqlResourceUsage = {
