@@ -26,12 +26,21 @@ export default async function UpdateRegistryResolver(
   };
 
   const annotations: Record<string, string> = { ...(k8secret.body.metadata?.annotations || {}) };
+
   if (value.urlPrefix) {
     annotations['kubepiter-prefix'] = value.urlPrefix;
   }
 
   if (value.urlPrefix === null) {
     delete annotations['kubepiter-prefix'];
+  }
+
+  if (value.policyKeepNthImage) {
+    annotations['kubepiter-keep-nth'] = value.policyKeepNthImage.toString();
+  }
+
+  if (value.policyKeepNthImage === null) {
+    delete annotations['kubepiter-keep-nth'];
   }
 
   await ctx.k8Core.patchNamespacedSecret(

@@ -15,6 +15,7 @@ import GraphContext from './types/GraphContext';
 import setupSubscription from './core/setupSubscription';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import logger from './global/logger';
 
 const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
@@ -84,5 +85,5 @@ async function startServer() {
 
 startServer().then(() => {
   // eslint-disable-next-line no-console
-  console.log('Starting server');
+  logger.info('Starting server');
 });

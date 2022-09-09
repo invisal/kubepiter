@@ -16,6 +16,14 @@ interface RegistryTagList {
   tags: string[];
 }
 
+async function parseResponse(response: Response) {
+  const contentType = response.headers.get('content-type') || '';
+  return {
+    data: contentType.indexOf('application/json') >= 0 ? await response.json() : undefined,
+    headers: response.headers,
+  };
+}
+
 export function parseWwwAuthenticate(text: string): Record<string, string> {
   if (text.substring(0, 'Bearer '.length) !== 'Bearer ') {
     throw new Error('Invalid authenticate header');
@@ -53,10 +61,7 @@ export default class RegistryClient {
     });
 
     if (response.status >= 200 && response.status < 300) {
-      return {
-        data: await response.json(),
-        headers: response.headers,
-      };
+      return await parseResponse(response);
     }
 
     if (!response.headers.get('www-authenticate')) {
@@ -96,10 +101,8 @@ export default class RegistryClient {
     }
 
     this.tokenCacheByKeys[cacheKey] = token;
-    return {
-      data: await responseRetry.json(),
-      headers: responseRetry.headers,
-    };
+
+    return await parseResponse(responseRetry);
   }
 
   async listRepositories() {

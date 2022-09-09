@@ -32,6 +32,10 @@ export default async function CreateRegistryResolver(_, { value }: { value: GqlR
     annotations['kubepiter-prefix'] = value.urlPrefix;
   }
 
+  if (value.policyKeepNthImage) {
+    annotations['kubepiter-keep-nth'] = value.policyKeepNthImage.toString();
+  }
+
   await ctx.k8Core.createNamespacedSecret(Environment.DEFAULT_NAMESPACE, {
     apiVersion: 'v1',
     kind: 'Secret',

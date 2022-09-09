@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-core';
 import CreateRegistryResolver from './CreateRegistryResolver';
+import EnforceKeepNthPolicyResolver from './EnforceKeepNthPolicyResolver';
 import RegistriesResolver from './RegistriesResolver';
 import RegistryReposResolver from './RegistryReposResolver';
 import UpdateRegistryResolver from './UpdateRegistryResolver';
@@ -16,6 +17,8 @@ export const RegistrySchemas = gql`
     createRegistry(value: RegistryInput): String
     updateRegistry(name: String!, value: RegistryInput): Boolean
     deleteRegistry(name: String!): Boolean
+
+    enforceKeepNthPolicy: Boolean
   }
 
   type Registry {
@@ -24,6 +27,7 @@ export const RegistrySchemas = gql`
     endpoint: String
     urlPrefix: String
     managed: Boolean
+    policyKeepNthImage: Int
   }
 
   type RegistryRepository {
@@ -51,6 +55,7 @@ export const RegistrySchemas = gql`
     username: String
     password: String
     urlPrefix: String
+    policyKeepNthImage: Int
   }
 `;
 
@@ -62,5 +67,6 @@ export const RegistryResolvers = {
   Mutation: {
     createRegistry: CreateRegistryResolver,
     updateRegistry: UpdateRegistryResolver,
+    enforceKeepNthPolicy: EnforceKeepNthPolicyResolver,
   },
 };

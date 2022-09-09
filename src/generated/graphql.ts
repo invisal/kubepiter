@@ -166,6 +166,7 @@ export type GqlMutation = {
   regenerateAppWebhook?: Maybe<Scalars['String']>;
   rollbackApp?: Maybe<Scalars['Boolean']>;
   updateApp?: Maybe<Scalars['Boolean']>;
+  updateRegistry?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<Scalars['Boolean']>;
 };
 
@@ -229,6 +230,12 @@ export type GqlMutationRollbackAppArgs = {
 export type GqlMutationUpdateAppArgs = {
   id: Scalars['ID'];
   value?: InputMaybe<GqlAppInput>;
+};
+
+
+export type GqlMutationUpdateRegistryArgs = {
+  name: Scalars['String'];
+  value?: InputMaybe<GqlRegistryInput>;
 };
 
 
@@ -333,14 +340,18 @@ export type GqlQueryUserArgs = {
 export type GqlRegistry = {
   __typename?: 'Registry';
   auth?: Maybe<Scalars['String']>;
+  endpoint?: Maybe<Scalars['String']>;
   managed?: Maybe<Scalars['Boolean']>;
   name: Scalars['ID'];
+  policyKeepNthImage?: Maybe<Scalars['Int']>;
+  urlPrefix?: Maybe<Scalars['String']>;
 };
 
 export type GqlRegistryInput = {
   endpoint?: InputMaybe<Scalars['String']>;
-  name: Scalars['ID'];
+  name?: InputMaybe<Scalars['ID']>;
   password?: InputMaybe<Scalars['String']>;
+  policyKeepNthImage?: InputMaybe<Scalars['Int']>;
   urlPrefix?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
 };
