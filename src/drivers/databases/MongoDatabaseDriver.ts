@@ -61,6 +61,18 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     };
   }
 
+  async getOwner(): Promise<KubepiterUser> {
+    const db = await this.getConnection();
+    const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ role: 'OWNER' });
+
+    if (!r) return undefined;
+
+    return {
+      ...r,
+      id: r._id.toString(),
+    };
+  }
+
   async getUserById(id: string): Promise<KubepiterUser> {
     const db = await this.getConnection();
     const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ _id: new ObjectId(id) });

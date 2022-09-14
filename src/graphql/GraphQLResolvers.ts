@@ -9,6 +9,7 @@ import { PodResolvers } from './resolvers/pods';
 import { RegistryResolvers } from './resolvers/registry';
 import { AppResolvers } from './resolvers/apps';
 import { SubscriptionResolvers } from './resolvers/subscriptions/SubscriptionResolvers';
+import { SetupResolvers } from './resolvers/setup';
 
 const OtherResolvers = {
   Query: {
@@ -33,6 +34,7 @@ const GraphQLResolvers = [
   PodResolvers,
   RegistryResolvers,
   SubscriptionResolvers,
+  SetupResolvers,
 ];
 
 export default GraphQLResolvers;
