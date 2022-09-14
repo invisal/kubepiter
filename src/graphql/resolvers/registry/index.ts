@@ -27,6 +27,7 @@ export const RegistrySchemas = gql`
     endpoint: String
     urlPrefix: String
     managed: Boolean
+    totalAppUsed: Int
     policyKeepNthImage: Int
   }
 
