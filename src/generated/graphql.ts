@@ -162,9 +162,11 @@ export type GqlMutation = {
   deleteRegistry?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Boolean']>;
   deployApp?: Maybe<GqlDeployResponse>;
+  enforceKeepNthPolicy?: Maybe<Scalars['Boolean']>;
   login?: Maybe<GqlLoginResponse>;
   regenerateAppWebhook?: Maybe<Scalars['String']>;
   rollbackApp?: Maybe<Scalars['Boolean']>;
+  setupOwnerAccount?: Maybe<Scalars['Boolean']>;
   updateApp?: Maybe<Scalars['Boolean']>;
   updateRegistry?: Maybe<Scalars['Boolean']>;
   updateUser?: Maybe<Scalars['Boolean']>;
@@ -227,6 +229,12 @@ export type GqlMutationRollbackAppArgs = {
 };
 
 
+export type GqlMutationSetupOwnerAccountArgs = {
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+
 export type GqlMutationUpdateAppArgs = {
   id: Scalars['ID'];
   value?: InputMaybe<GqlAppInput>;
@@ -276,6 +284,7 @@ export type GqlQuery = {
   registryManifest?: Maybe<GqlRegistryManifest>;
   registryRepoTags?: Maybe<Array<Maybe<GqlRegistryRepositoryTag>>>;
   registryRepos?: Maybe<Array<Maybe<GqlRegistryRepository>>>;
+  setupStatus?: Maybe<GqlSetupStatus>;
   user?: Maybe<GqlUser>;
   users?: Maybe<Array<Maybe<GqlUser>>>;
   version?: Maybe<Scalars['String']>;
@@ -344,6 +353,7 @@ export type GqlRegistry = {
   managed?: Maybe<Scalars['Boolean']>;
   name: Scalars['ID'];
   policyKeepNthImage?: Maybe<Scalars['Int']>;
+  totalAppUsed?: Maybe<Scalars['Int']>;
   urlPrefix?: Maybe<Scalars['String']>;
 };
 
@@ -386,6 +396,11 @@ export type GqlResourceUsage = {
   limit?: Maybe<Scalars['Float']>;
   request?: Maybe<Scalars['Float']>;
   usage?: Maybe<Scalars['Float']>;
+};
+
+export type GqlSetupStatus = {
+  __typename?: 'SetupStatus';
+  hasOwnerSetup?: Maybe<Scalars['Boolean']>;
 };
 
 export type GqlSubscription = {
