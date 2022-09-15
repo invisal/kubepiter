@@ -3,6 +3,7 @@ import UpdateAppResolver from '../UpdateAppResolver';
 import AppResolver from './AppResolver';
 import AppsResolver from './AppsResolver';
 import CreateAppResolver from './CreateAppResolver';
+import DeleteAppResolver from './DeleteAppResolver';
 import DeployAppResolver from './DeployAppResolver';
 import RegenerateAppWebhookResolver from './RegenerateAppWebhookResolver';
 import RollbackAppResolver from './RollbackAppResolver';
@@ -17,6 +18,7 @@ export const AppSchemas = gql`
     updateApp(id: ID!, value: AppInput): Boolean
     createApp(name: String!): String
     deployApp(id: ID!, deploy: Boolean = True, build: Boolean = True): DeployResponse
+    deleteApp(id: ID!): Boolean
     regenerateAppWebhook(id: ID!): String
     rollbackApp(appId: ID!, version: Int): Boolean
   }
@@ -132,6 +134,7 @@ export const AppResolvers = {
   Mutation: {
     updateApp: UpdateAppResolver,
     createApp: CreateAppResolver,
+    deleteApp: DeleteAppResolver,
     deployApp: DeployAppResolver,
     regenerateAppWebhook: RegenerateAppWebhookResolver,
     rollbackApp: RollbackAppResolver,

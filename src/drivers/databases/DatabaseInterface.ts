@@ -12,6 +12,7 @@ export default abstract class DatabaseInterface {
   // App
   abstract getAppById(id: string): Promise<KubepiterApp>;
   abstract getAppList(): Promise<KubepiterApp[]>;
+  abstract deleteApp(id: string): Promise<boolean>;
   abstract updatePartialAppById(id: string, partialValue: Partial<KubepiterApp>): Promise<boolean>;
 
   abstract createApp(id: string, value: Partial<KubepiterApp>): Promise<boolean>;

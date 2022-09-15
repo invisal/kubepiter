@@ -39,6 +39,12 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     return true;
   }
 
+  async deleteApp(id: string) {
+    const db = await this.getConnection();
+    const result = await db.collection('apps').deleteOne({ id });
+    return result.acknowledged;
+  }
+
   async getAppList(): Promise<KubepiterApp[]> {
     const db = await this.getConnection();
     const cursor = db.collection<KubepiterApp>('apps').find();
