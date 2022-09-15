@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-core';
 import CreateRegistryResolver from './CreateRegistryResolver';
+import DeleteRegistryResolver from './DeleteRegistryResolver';
 import EnforceKeepNthPolicyResolver from './EnforceKeepNthPolicyResolver';
 import RegistriesResolver from './RegistriesResolver';
 import RegistryReposResolver from './RegistryReposResolver';
@@ -16,7 +17,7 @@ export const RegistrySchemas = gql`
   extend type Mutation {
     createRegistry(value: RegistryInput): String
     updateRegistry(name: String!, value: RegistryInput): Boolean
-    deleteRegistry(name: String!): Boolean
+    deleteRegistry(name: String!, force: Boolean): Boolean
 
     enforceKeepNthPolicy: Boolean
   }
@@ -68,6 +69,7 @@ export const RegistryResolvers = {
   Mutation: {
     createRegistry: CreateRegistryResolver,
     updateRegistry: UpdateRegistryResolver,
+    deleteRegistry: DeleteRegistryResolver,
     enforceKeepNthPolicy: EnforceKeepNthPolicyResolver,
   },
 };
