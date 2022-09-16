@@ -1,6 +1,6 @@
 {
   "name": "kubepiter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Turn your Kubernetes cluster into PaaS",
   "main": "index.js",
   "scripts": {
