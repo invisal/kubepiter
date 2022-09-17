@@ -50,14 +50,21 @@ export default class RegistryClient {
   ): Promise<{ data: T; headers: Headers }> {
     const cacheKey = `${method}_${path}`;
     const href = new URL(path, this.options.endpoint).href;
+
+    const authorizationHeader = this.tokenCacheByKeys[cacheKey]
+      ? {
+          Authorization: 'Bearer ' + this.tokenCacheByKeys[cacheKey],
+        }
+      : {
+          Authorization: 'Basic ' + Buffer.from(this.options.username + ':' + this.options.password).toString('base64'),
+        };
+
     const response = await fetch(href, {
       method,
-      headers: this.tokenCacheByKeys[cacheKey]
-        ? {
-            Authorization: 'Bearer ' + this.tokenCacheByKeys[cacheKey],
-            ...headers,
-          }
-        : headers,
+      headers: {
+        ...authorizationHeader,
+        ...headers,
+      },
     });
 
     if (response.status >= 200 && response.status < 300) {
