@@ -38,7 +38,7 @@ export default abstract class DatabaseInterface {
 
   abstract getBuildLog(id: string): Promise<KubepiterBuildJobLog>;
   abstract getBuildLogList(
-    condition: { appId?: string },
+    condition: { appId?: string; status?: string[] },
     offset: number,
     limit: number,
   ): Promise<KubepiterBuildJobLog[]>;

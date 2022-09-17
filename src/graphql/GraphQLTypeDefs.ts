@@ -15,7 +15,7 @@ const OtherTypeDefs = gql`
     nodes: [KubeNode]
 
     buildLog(id: ID!): BuildJob
-    buildLogs(appId: String, offset: Int = 0, limit: Int = 20): [BuildJob]
+    buildLogs(appId: String, status: [String], offset: Int = 0, limit: Int = 20): [BuildJob]
 
     nodeGroups: [NodeGroup]
   }
