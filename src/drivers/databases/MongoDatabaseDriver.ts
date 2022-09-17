@@ -61,6 +61,8 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     const db = await this.getConnection();
     const r = await db.collection('users').findOne<WithId<KubepiterUser>>({ username });
 
+    if (!r) return null;
+
     return {
       ...r,
       id: r._id.toString(),
@@ -176,11 +178,18 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     return await db.collection('build_logs').findOne<KubepiterBuildJobLog>({ id });
   }
 
-  async getBuildLogList(condition: { appId?: string }, offset: number, limit: number): Promise<KubepiterBuildJobLog[]> {
+  async getBuildLogList(
+    condition: { appId?: string; status?: string[] },
+    offset: number,
+    limit: number,
+  ): Promise<KubepiterBuildJobLog[]> {
     const db = await this.getConnection();
     const cursor = db
       .collection<KubepiterBuildJobLog>('build_logs')
-      .find(condition?.appId ? condition : undefined)
+      .find({
+        ...(condition.appId ? { appId: condition.appId } : undefined),
+        ...(condition.status ? { status: { $in: condition.status } } : undefined),
+      } as unknown)
       .sort({
         createdAt: -1,
       })
