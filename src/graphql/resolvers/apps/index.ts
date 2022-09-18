@@ -50,8 +50,15 @@ export const AppSchemas = gql`
 
     gitWebhook: String
     resources: AppResource
+    resourceUsage: ResourceUsageDetail
 
     hasChanged: Boolean
+  }
+
+  type ResourceUsageDetail {
+    cpu: ResourceUsage
+    memory: ResourceUsage
+    totalPod: Int
   }
 
   type AppResource {

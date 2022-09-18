@@ -32,6 +32,7 @@ export type GqlApp = {
   nodeGroup?: Maybe<Scalars['String']>;
   port?: Maybe<Scalars['Int']>;
   replicas?: Maybe<Scalars['Int']>;
+  resourceUsage?: Maybe<GqlResourceUsageDetail>;
   resources?: Maybe<GqlAppResource>;
   staticVersion?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['Int']>;
@@ -159,6 +160,7 @@ export type GqlMutation = {
   createApp?: Maybe<Scalars['String']>;
   createRegistry?: Maybe<Scalars['String']>;
   createUser?: Maybe<GqlCreateUserResponse>;
+  deleteApp?: Maybe<Scalars['Boolean']>;
   deleteRegistry?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Boolean']>;
   deployApp?: Maybe<GqlDeployResponse>;
@@ -194,7 +196,13 @@ export type GqlMutationCreateUserArgs = {
 };
 
 
+export type GqlMutationDeleteAppArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type GqlMutationDeleteRegistryArgs = {
+  force?: InputMaybe<Scalars['Boolean']>;
   name: Scalars['String'];
 };
 
@@ -305,6 +313,7 @@ export type GqlQueryBuildLogsArgs = {
   appId?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  status?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -396,6 +405,13 @@ export type GqlResourceUsage = {
   limit?: Maybe<Scalars['Float']>;
   request?: Maybe<Scalars['Float']>;
   usage?: Maybe<Scalars['Float']>;
+};
+
+export type GqlResourceUsageDetail = {
+  __typename?: 'ResourceUsageDetail';
+  cpu?: Maybe<GqlResourceUsage>;
+  memory?: Maybe<GqlResourceUsage>;
+  totalPod?: Maybe<Scalars['Int']>;
 };
 
 export type GqlSetupStatus = {
