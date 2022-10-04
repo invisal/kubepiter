@@ -92,3 +92,10 @@ export interface KubepiterBuildJobLog {
   status: ImageBuildJobStatus;
   logs: string;
 }
+
+export interface KubepiterEventLog {
+  title: string;
+  type: string;
+  description: string;
+  createdAt: number;
+}

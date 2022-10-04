@@ -1,6 +1,6 @@
 {
   "name": "kubepiter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Turn your Kubernetes cluster into PaaS",
   "main": "index.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^28.1.6",
     "@types/mock-express-request": "^0.2.0",
+    "@types/node-cron": "^3.0.4",
     "@types/secure-random-password": "^0.2.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
@@ -76,6 +77,7 @@
     "graphql-ws": "^5.10.1",
     "lodash": "^4.17.21",
     "mongodb": "^4.6.0",
+    "node-cron": "^3.0.2",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "secure-random-password": "^0.2.3",

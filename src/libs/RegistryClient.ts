@@ -47,8 +47,9 @@ export default class RegistryClient {
     method: string,
     path: string,
     headers?: Record<string, string>,
+    key?: string,
   ): Promise<{ data: T; headers: Headers }> {
-    const cacheKey = `${method}_${path}`;
+    const cacheKey = key || `${method}_${path}`;
     const href = new URL(path, this.options.endpoint).href;
 
     const authorizationHeader = this.tokenCacheByKeys[cacheKey]
@@ -135,10 +136,16 @@ export default class RegistryClient {
             Accept: mediaType,
           }
         : {},
+      `get_${repositoryName}_manifest`,
     );
   }
 
   async deleteManifest(repositoryName: string, reference: string) {
-    return await this.request('DELETE', `/v2/${repositoryName}/manifests/${reference}`);
+    return await this.request(
+      'DELETE',
+      `/v2/${repositoryName}/manifests/${reference}`,
+      {},
+      `delete_${repositoryName}_manifest`,
+    );
   }
 }

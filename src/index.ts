@@ -16,6 +16,7 @@ import setupSubscription from './core/setupSubscription';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import logger from './global/logger';
+import CronManager from './crons/CronManager';
 
 const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
@@ -87,3 +88,7 @@ startServer().then(() => {
   // eslint-disable-next-line no-console
   logger.info('Starting server');
 });
+
+if (Environment.ENABLE_CRON) {
+  new CronManager().start();
+}

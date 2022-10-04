@@ -6,6 +6,7 @@ import {
   KubepiterApp,
   KubepiterUser,
   KubepiterDeploymentLog,
+  KubepiterEventLog,
 } from '../../types/common';
 
 export default abstract class DatabaseInterface {
@@ -51,6 +52,10 @@ export default abstract class DatabaseInterface {
     offset: number,
     limit: number,
   ): Promise<KubepiterDeploymentLog[]>;
+
+  // Event log
+  abstract insertEventLog(value: Partial<KubepiterEventLog>): Promise<string>;
+  abstract getEventLogList(offset: number, limit: number): Promise<KubepiterEventLog[]>;
 
   // Setting
   abstract getBuilderSetting(): Promise<KubepiterBuilderSetting>;

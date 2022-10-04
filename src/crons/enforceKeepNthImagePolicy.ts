@@ -1,12 +1,21 @@
 import { V1Secret } from '@kubernetes/client-node';
+import getDatabaseConnection from 'src/drivers/databases/DatabaseInstance';
 import { Environment } from 'src/Environment';
 import getRegistryClient from 'src/global/getRegistryClient';
 import logger from 'src/global/logger';
 import { getKuberneteCore } from 'src/k8s/getKubernete';
 
+let IS_KEEP_NTH_IMAGE_RUNNING = false;
+
 async function enforceKeepNthImagePolicyPerRegistry(registry: V1Secret, nth: number): Promise<number> {
   const client = getRegistryClient(registry);
   let deletingCount = 0;
+
+  if (IS_KEEP_NTH_IMAGE_RUNNING) {
+    logger.info('Keep nth image policy job is already running.');
+    return;
+  }
+  IS_KEEP_NTH_IMAGE_RUNNING = true;
 
   try {
     const repos = await client.listRepositories();
@@ -45,9 +54,11 @@ async function enforceKeepNthImagePolicyPerRegistry(registry: V1Secret, nth: num
       }
     }
 
+    IS_KEEP_NTH_IMAGE_RUNNING = false;
     return deletingCount;
   } catch (e) {
     logger.error(e.message);
+    IS_KEEP_NTH_IMAGE_RUNNING = false;
     return deletingCount;
   }
 }
@@ -60,6 +71,14 @@ export default async function enforceKeepNthImagePolicy() {
   logger.info('Running enforceKeepNthImagePolicy');
 
   try {
+    const db = getDatabaseConnection();
+    await db.insertEventLog({
+      createdAt: Math.floor(Date.now() / 1000),
+      title: 'Enforce keep nth image per repository policy',
+      description: 'Enforce keep nth image per repository policy',
+      type: 'ENFORCE_KEEP_NTH_IMAGE_POLICY',
+    });
+
     for (const reg of registries) {
       if (reg.metadata.annotations && reg.metadata.annotations['kubepiter-keep-nth']) {
         logger.info(`Enforce the nth policy on registry ${reg.metadata.name}`);

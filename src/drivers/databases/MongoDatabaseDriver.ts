@@ -7,6 +7,7 @@ import {
   KubepiterApp,
   KubepiterUser,
   KubepiterDeploymentLog,
+  KubepiterEventLog,
 } from '../../types/common';
 import DatabaseInterface from './DatabaseInterface';
 
@@ -214,6 +215,27 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   async getDeploymentLog(id: string): Promise<KubepiterDeploymentLog> {
     const db = await this.getConnection();
     return await db.collection('deployment_logs').findOne<KubepiterDeploymentLog>({ _id: new ObjectId(id) });
+  }
+
+  // Cron event log
+  async insertEventLog(value: Partial<KubepiterEventLog>): Promise<string> {
+    const db = await this.getConnection();
+    const result = await db.collection('event_logs').insertOne(value);
+    return result.insertedId.toString();
+  }
+
+  async getEventLogList(offset: number, limit: number): Promise<KubepiterEventLog[]> {
+    const db = await this.getConnection();
+    const cursor = db
+      .collection<KubepiterEventLog>('event_logs')
+      .find()
+      .sort({
+        createdAt: -1,
+      })
+      .skip(offset)
+      .limit(limit);
+
+    return cursor.toArray();
   }
 
   async getDeploymentLogList(
