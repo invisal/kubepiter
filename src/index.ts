@@ -86,9 +86,10 @@ async function startServer() {
 
 startServer().then(() => {
   // eslint-disable-next-line no-console
-  logger.info('Starting server');
+  logger.info('Start server');
 });
 
 if (Environment.ENABLE_CRON) {
+  logger.debug('Start cron manager');
   new CronManager().start();
 }

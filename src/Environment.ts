@@ -10,5 +10,6 @@ export const Environment = Object.freeze({
   MONGODB_CRT: process.env.MONGO_CERTICATE_FILE,
   PORT: process.env.PORT,
   KUBECONFIG: process.env.KUBECONFIG,
-  ENABLE_CRON: !!process.env.DISABLE_CRON,
+  ENABLE_CRON: !process.env.DISABLE_CRON,
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
 });

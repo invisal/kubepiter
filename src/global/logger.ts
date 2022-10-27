@@ -1,3 +1,4 @@
+import { Environment } from 'src/Environment';
 import { createLogger, transports } from 'winston';
 
 const logLevels = {
@@ -11,6 +12,7 @@ const logLevels = {
 
 const logger = createLogger({
   levels: logLevels,
+  level: Environment.LOG_LEVEL,
   transports: [new transports.Console()],
 });
 
