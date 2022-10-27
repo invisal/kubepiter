@@ -1,10 +1,10 @@
 import { ImageBuilderOptions, ImageBuildJobStatus } from './ImageBuilderManager';
-import { URL } from 'url';
 import { CoreV1Api, V1PodSpec } from '@kubernetes/client-node';
 import DatabaseInterface from '../drivers/databases/DatabaseInterface';
 import { Environment } from '../Environment';
+import buildGitUrl from 'src/libs/buildGitUrl';
 
-const POD_BUILDER_NAME = 'kubebox-kaniko-build';
+const POD_BUILDER_NAME = 'kubepiter-kaniko-build';
 
 export default async function buildImageAndPush(
   coreApi: CoreV1Api,
@@ -45,11 +45,11 @@ export default async function buildImageAndPush(
     while (true) {
       await wait(2000);
 
-      const pod = await coreApi.readNamespacedPod('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
+      const pod = await coreApi.readNamespacedPod(POD_BUILDER_NAME, Environment.DEFAULT_NAMESPACE);
 
       // Getting the log
       try {
-        const podLog = await coreApi.readNamespacedPodLog('kubebox-kaniko-build', Environment.DEFAULT_NAMESPACE);
+        const podLog = await coreApi.readNamespacedPodLog(POD_BUILDER_NAME, Environment.DEFAULT_NAMESPACE);
         responseLog = podLog.body;
         if (logCallback) {
           logCallback(podLog.body);
@@ -82,16 +82,6 @@ function escapeShell(cmd: string) {
 }
 
 function generateBuilderPodDefinition(options: ImageBuilderOptions, selector?: V1PodSpec['nodeSelector']) {
-  // Building git link
-  const url = new URL(options.git.url);
-  if (options.git.username) {
-    url.username = options.git.username;
-  }
-
-  if (options.git.password) {
-    url.password = options.git.password;
-  }
-
   return {
     apiVersion: 'v1',
     kind: 'Pod',
@@ -108,7 +98,10 @@ function generateBuilderPodDefinition(options: ImageBuilderOptions, selector?: V
           image: 'gcr.io/kaniko-project/executor:debug',
           env: options.args,
           args: [
-            `--context=${url.href}`,
+            `--context=${buildGitUrl(options.git.url, options.git.branch, {
+              username: options.git.username,
+              password: options.git.password,
+            })}`,
             `--destination=${options.image}:${options.version}`,
             '--verbosity=info',
             ...options.args.map((e) => `--build-arg=${e.name}=${escapeShell(e.value)}`),
