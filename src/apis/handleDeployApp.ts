@@ -4,7 +4,7 @@ import withAttachApp from './withAttachedApp';
 
 const handleDeployApp = withAttachApp(async ({ app, db, res }) => {
   app.version = app.version + 1;
-  app.currentVersion = app.version + 1;
+  app.currentVersion = app.version;
 
   await db.updatePartialAppById(app.id, {
     version: app.version,
