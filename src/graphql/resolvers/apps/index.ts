@@ -112,6 +112,7 @@ export const AppSchemas = gql`
     folderName: String
     nodeGroup: String
     resources: AppResourceInput
+    dockerfilePath: String
   }
 
   type AppGit {

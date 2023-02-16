@@ -12,6 +12,8 @@ export interface KubepiterAppConfig {
   env?: { name: string; value: string }[];
   port: number;
   replicas?: number;
+
+  dockerfilePath?: string;
 }
 
 export interface KubepiterApp extends KubepiterAppConfig {

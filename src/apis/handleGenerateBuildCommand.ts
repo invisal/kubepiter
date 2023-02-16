@@ -11,7 +11,9 @@ const handleGenerateBuildCommand = withAttachApp(({ app, res }) => {
   return res.send(
     [
       `#!/bin/bash`,
-      `docker build -t ${app.image}:${nextVersion}${args} .`,
+      app.dockerfilePath
+        ? `docker build -t ${app.image}:${nextVersion}${args} -f ${app.dockerfilePath} .`
+        : `docker build -t ${app.image}:${nextVersion}${args} .`,
       `docker push ${app.image}:${nextVersion}`,
     ].join('\n'),
   );
