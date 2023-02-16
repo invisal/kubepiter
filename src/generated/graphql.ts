@@ -17,6 +17,7 @@ export type GqlApp = {
   __typename?: 'App';
   cluster?: Maybe<Scalars['String']>;
   currentVersion?: Maybe<Scalars['Int']>;
+  dockerfilePath?: Maybe<Scalars['String']>;
   env?: Maybe<Array<Maybe<GqlAppEnvironmentVariable>>>;
   folderName?: Maybe<Scalars['String']>;
   git?: Maybe<GqlAppGit>;
@@ -79,6 +80,7 @@ export type GqlAppIngressInput = {
 
 export type GqlAppInput = {
   cluster?: InputMaybe<Scalars['String']>;
+  dockerfilePath?: InputMaybe<Scalars['String']>;
   env?: InputMaybe<Array<InputMaybe<GqlAppEnvironmentVariableInput>>>;
   folderName?: InputMaybe<Scalars['String']>;
   git?: InputMaybe<GqlAppGitInput>;
@@ -128,6 +130,19 @@ export type GqlBuildJob = {
   status?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
 };
+
+export type GqlComponent = {
+  __typename?: 'Component';
+  installed?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<GqlComponentName>;
+  required?: Maybe<Scalars['Boolean']>;
+};
+
+export enum GqlComponentName {
+  LetencryptManager = 'LETENCRYPT_MANAGER',
+  MetricServer = 'METRIC_SERVER',
+  NginxIngress = 'NGINX_INGRESS'
+}
 
 export type GqlCreateUserResponse = {
   __typename?: 'CreateUserResponse';
@@ -282,6 +297,7 @@ export type GqlQuery = {
   apps?: Maybe<Array<Maybe<GqlApp>>>;
   buildLog?: Maybe<GqlBuildJob>;
   buildLogs?: Maybe<Array<Maybe<GqlBuildJob>>>;
+  components?: Maybe<Array<Maybe<GqlComponent>>>;
   me?: Maybe<GqlUser>;
   nodeGroups?: Maybe<Array<Maybe<GqlNodeGroup>>>;
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;

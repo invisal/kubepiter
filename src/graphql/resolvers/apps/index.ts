@@ -51,6 +51,7 @@ export const AppSchemas = gql`
     gitWebhook: String
     resources: AppResource
     resourceUsage: ResourceUsageDetail
+    dockerfilePath: String
 
     hasChanged: Boolean
   }
