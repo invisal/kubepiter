@@ -9,6 +9,7 @@ import { KubepiterApp, KubepiterAppConfig } from 'src/types/common';
 export function extractAppConfigurationFromApp(app: KubepiterApp): KubepiterAppConfig {
   return {
     ingress: app.ingress,
+    ingressBodySize: app.ingressBodySize,
     port: app.port,
     env: app.env,
     nodeGroup: app.nodeGroup,

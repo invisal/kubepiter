@@ -27,6 +27,7 @@ export type GqlApp = {
   image?: Maybe<Scalars['String']>;
   imagePullSecret?: Maybe<Scalars['String']>;
   ingress?: Maybe<Array<Maybe<GqlAppIngress>>>;
+  ingressBodySize?: Maybe<Scalars['Float']>;
   lastBuildJob?: Maybe<GqlBuildJob>;
   name?: Maybe<Scalars['String']>;
   namespace?: Maybe<Scalars['String']>;
@@ -87,6 +88,7 @@ export type GqlAppInput = {
   image?: InputMaybe<Scalars['String']>;
   imagePullSecret?: InputMaybe<Scalars['String']>;
   ingress?: InputMaybe<Array<InputMaybe<GqlAppIngressInput>>>;
+  ingressBodySize?: InputMaybe<Scalars['Float']>;
   name?: InputMaybe<Scalars['String']>;
   namespace?: InputMaybe<Scalars['String']>;
   nodeGroup?: InputMaybe<Scalars['String']>;
