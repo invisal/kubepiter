@@ -5,10 +5,13 @@ import { ImageBuildJobStatus } from '../k8s/ImageBuilderManager';
 export interface KubepiterAppConfig {
   resources?: GqlAppResource | null;
   nodeGroup?: string;
+
   ingress: {
     host: string;
     path: string;
   }[];
+  ingressBodySize?: number;
+
   env?: { name: string; value: string }[];
   port: number;
   replicas?: number;

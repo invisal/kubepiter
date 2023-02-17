@@ -16,6 +16,13 @@ export function buildIngressFromApp(app: KubepiterApp) {
         app: app.id,
         'managed-by-kubepiter': 'true',
       },
+      ...(app.ingressBodySize
+        ? {
+            annotations: {
+              'nginx.ingress.kubernetes.io/proxy-body-size': `${app.ingressBodySize}m`,
+            },
+          }
+        : {}),
     },
     spec: {
       ingressClassName: 'nginx',

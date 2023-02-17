@@ -30,7 +30,10 @@ export const AppSchemas = gql`
     cluster: String
     env: [AppEnvironmentVariable]
     image: String
+
     ingress: [AppIngress]
+    ingressBodySize: Float
+
     nodeGroup: String
     folderName: String
 
@@ -104,6 +107,7 @@ export const AppSchemas = gql`
     cluster: String
     image: String
     ingress: [AppIngressInput]
+    ingressBodySize: Float
     staticVersion: String
     port: Int
     namespace: String
