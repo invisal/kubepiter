@@ -153,12 +153,28 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
   }
 
   async getBuilderSetting(): Promise<KubepiterBuilderSetting> {
-    const buildSetting = await this.db
+    const db = await this.getConnection();
+    const buildSetting = await db
       .collection('setting')
       .findOne<{ value: KubepiterBuilderSetting }>({ name: 'builder' });
 
     if (!buildSetting) return {};
     return buildSetting.value;
+  }
+
+  async updateSetting<T>(optionName: string, value: T): Promise<boolean> {
+    const db = await this.getConnection();
+    const result = await db.collection('setting').updateOne(
+      { name: optionName },
+      {
+        $set: { last_update_time: value },
+      },
+      {
+        upsert: true,
+      },
+    );
+
+    return result.acknowledged;
   }
 
   async updateBuildLog(id: string, log: KubepiterBuildJobLog): Promise<boolean> {

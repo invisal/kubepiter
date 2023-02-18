@@ -59,4 +59,5 @@ export default abstract class DatabaseInterface {
 
   // Setting
   abstract getBuilderSetting(): Promise<KubepiterBuilderSetting>;
+  abstract updateSetting<T>(optionName: string, value: T): Promise<boolean>;
 }
