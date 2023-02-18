@@ -50,7 +50,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: invisal/kubepiter
+          images: invisal/kubepiter-web-client
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
