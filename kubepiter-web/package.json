@@ -1,0 +1,41 @@
+{
+  "name": "kubepiter-web",
+  "description": "Kubepiter Official Web Client",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.6.9",
+    "@carbon/react": "^1.8.0",
+    "@types/carbon__layout": "^0.0.1",
+    "@types/react-gauge-chart": "^0.3.1",
+    "chart.js": "^3.9.1",
+    "date-fns": "^2.29.1",
+    "graphql": "^16.5.0",
+    "graphql-ws": "^5.10.1",
+    "next": "12.2.4",
+    "react": "18.2.0",
+    "react-ansi": "^3.0.2",
+    "react-chartjs-2": "^4.3.1",
+    "react-dom": "18.2.0",
+    "react-gauge-chart": "^0.4.0",
+    "subscriptions-transport-ws": "^0.11.0"
+  },
+  "devDependencies": {
+    "@types/carbon-components-react": "^7.55.2",
+    "@types/carbon__icons-react": "^11.5.0",
+    "@types/carbon__type": "^0.0.1",
+    "@types/node": "18.6.4",
+    "@types/react": "18.0.15",
+    "@types/react-dom": "18.0.6",
+    "@zeit/next-sass": "^1.0.1",
+    "eslint": "8.21.0",
+    "eslint-config-next": "12.2.4",
+    "sass": "^1.54.3",
+    "typescript": "4.7.4"
+  }
+}

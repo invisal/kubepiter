@@ -1,0 +1,70 @@
+@use "@carbon/react/scss/reset";
+@use "@carbon/react/scss/colors";
+@use "@carbon/react/scss/type";
+@use "@carbon/react/scss/grid";
+@use "@carbon/react/scss/spacing";
+@use "@carbon/react/scss/layer";
+@use "@carbon/themes";
+@use "@carbon/react/scss/components";
+
+@use "utils";
+
+body {
+  overflow-x: hidden
+}
+
+.container {
+  display: flex;
+}
+
+.side {
+  width: 256px;
+  flex-shrink: 0;
+}
+
+.main {
+  flex-grow: 1;
+  padding-left: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.card {
+  background-color: var(--cds-layer);
+  padding: 1rem;
+}
+
+.home-container {
+  max-width: 99rem;
+}
+
+@media only screen and (min-width: 66rem) {
+  .home-container {
+    padding-left: 17rem;
+  }
+}
+
+
+.flex {
+  display: flex;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+// https://carbondesignsystem.com/guidelines/color/usage/
+// https://github.com/carbon-design-system/carbon/blob/main/packages/themes/docs/sass.md
+.bg-field-01 {
+  background: themes.$field-01;
+}
+
+.bg-support-info {
+  background: themes.$support-info;
+}
+
+.bg-support-warning {
+  background: themes.$support-warning-inverse;
+}

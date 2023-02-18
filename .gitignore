@@ -1,13 +1,1 @@
 node_modules
-playground
-dist
-
-.env
-.env.test
-.env.development
-
-ca-certificate.crt
-
-.DS_Store
-
-coverage

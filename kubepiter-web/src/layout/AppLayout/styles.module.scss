@@ -1,0 +1,29 @@
+.banner {
+  background-color: #000;
+  margin-right: -3rem;
+  margin-left: -2rem;
+  padding-left: 2rem;
+  margin-top: -2rem;
+  height: 200px;
+  padding-bottom: 2rem;
+  display: flex;
+  align-items: flex-end;
+
+  h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  span {
+    color: #fff;
+  }
+}
+
+.tabs {
+  margin-bottom: 2rem;
+  margin-right: -3rem;
+  margin-left: -2rem;
+  padding-left: 2rem;
+  background-color: var(--cds-layer);
+}

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubepiter-client-dep
+  labels:
+    app: kubepiter-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubepiter-client
+  template:
+    metadata:
+      labels:
+        app: kubepiter-client
+    spec:
+      containers:
+        - name: kubepiter-client
+          image: invisal/kubepiter-web-client:0.1.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ENDPOINT
+              value: https://example.com
