@@ -1,0 +1,32 @@
+extend type Query {
+  deployments: [Deployment]
+}
+
+type Deployment {
+  id: ID
+  type: DeploymentType
+  status: DeploymentStatus
+  version: String
+
+  buildInfo: DeploymentBuildInfo
+
+  createdAt: Int
+  completedAt: Int
+}
+
+type DeploymentBuildInfo {
+  id: String
+  jobId: String
+  repository: String
+}
+
+enum DeploymentStatus {
+  PENDING
+  RUNNING
+  FAILED
+  SUCCESS
+}
+
+enum DeploymentType {
+  GITHUB_ACTION
+}

@@ -1,7 +1,6 @@
 import {
   KubepiterUserToken,
   KubepiterBuilderSetting,
-  KubepiterBuildJobLog,
   KubepiterNodeGroup,
   KubepiterApp,
   KubepiterUser,
@@ -33,16 +32,6 @@ export default abstract class DatabaseInterface {
   // Node
   abstract getNodeGroup(tag: string): Promise<KubepiterNodeGroup>;
   abstract getNodeGroupList(): Promise<KubepiterNodeGroup[]>;
-
-  abstract insertBuildLog(log: KubepiterBuildJobLog): Promise<string>;
-  abstract updateBuildLog(id: string, log: KubepiterBuildJobLog): Promise<boolean>;
-
-  abstract getBuildLog(id: string): Promise<KubepiterBuildJobLog>;
-  abstract getBuildLogList(
-    condition: { appId?: string; status?: string[] },
-    offset: number,
-    limit: number,
-  ): Promise<KubepiterBuildJobLog[]>;
 
   // Deployment Log
   abstract insertDeploymentLog(value: Partial<KubepiterDeploymentLog>): Promise<string>;

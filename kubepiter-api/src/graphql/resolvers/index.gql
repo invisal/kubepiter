@@ -1,0 +1,37 @@
+scalar JSON
+
+type Query {
+  version: String
+  nodes: [KubeNode]
+  nodeGroups: [NodeGroup]
+}
+
+type Mutation {
+  login(username: String!, password: String!, ttl: Int): LoginResponse
+}
+
+type NodeGroup {
+  tag: ID!
+  name: String
+  description: String
+  selector: JSON
+}
+
+type KubeNode {
+  name: String
+  memoryUsage: ResourceUsage
+  cpuUsage: ResourceUsage
+  labels: JSON
+}
+
+type LoginResponse {
+  token: String
+}
+
+type ResourceUsage {
+  capacity: Float
+  allocatable: Float
+  usage: Float
+  limit: Float
+  request: Float
+}

@@ -28,7 +28,6 @@ export type GqlApp = {
   imagePullSecret?: Maybe<Scalars['String']>;
   ingress?: Maybe<Array<Maybe<GqlAppIngress>>>;
   ingressBodySize?: Maybe<Scalars['Float']>;
-  lastBuildJob?: Maybe<GqlBuildJob>;
   name?: Maybe<Scalars['String']>;
   namespace?: Maybe<Scalars['String']>;
   nodeGroup?: Maybe<Scalars['String']>;
@@ -121,18 +120,6 @@ export type GqlAppResourceQuotaInput = {
   memory?: InputMaybe<Scalars['Int']>;
 };
 
-export type GqlBuildJob = {
-  __typename?: 'BuildJob';
-  appId?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['Int']>;
-  endAt?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['ID']>;
-  logs?: Maybe<Scalars['String']>;
-  startAt?: Maybe<Scalars['Int']>;
-  status?: Maybe<Scalars['String']>;
-  version?: Maybe<Scalars['String']>;
-};
-
 export type GqlComponent = {
   __typename?: 'Component';
   installed?: Maybe<Scalars['Boolean']>;
@@ -152,11 +139,34 @@ export type GqlCreateUserResponse = {
   password?: Maybe<Scalars['String']>;
 };
 
-export type GqlDeployResponse = {
-  __typename?: 'DeployResponse';
-  message?: Maybe<Scalars['String']>;
-  yaml?: Maybe<Scalars['String']>;
+export type GqlDeployment = {
+  __typename?: 'Deployment';
+  buildInfo?: Maybe<GqlDeploymentBuildInfo>;
+  completedAt?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['ID']>;
+  status?: Maybe<GqlDeploymentStatus>;
+  type?: Maybe<GqlDeploymentType>;
+  version?: Maybe<Scalars['String']>;
 };
+
+export type GqlDeploymentBuildInfo = {
+  __typename?: 'DeploymentBuildInfo';
+  id?: Maybe<Scalars['String']>;
+  jobId?: Maybe<Scalars['String']>;
+  repository?: Maybe<Scalars['String']>;
+};
+
+export enum GqlDeploymentStatus {
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Running = 'RUNNING',
+  Success = 'SUCCESS'
+}
+
+export enum GqlDeploymentType {
+  GithubAction = 'GITHUB_ACTION'
+}
 
 export type GqlKubeNode = {
   __typename?: 'KubeNode';
@@ -180,7 +190,6 @@ export type GqlMutation = {
   deleteApp?: Maybe<Scalars['Boolean']>;
   deleteRegistry?: Maybe<Scalars['Boolean']>;
   deleteUser?: Maybe<Scalars['Boolean']>;
-  deployApp?: Maybe<GqlDeployResponse>;
   enforceKeepNthPolicy?: Maybe<Scalars['Boolean']>;
   login?: Maybe<GqlLoginResponse>;
   regenerateAppWebhook?: Maybe<Scalars['String']>;
@@ -225,13 +234,6 @@ export type GqlMutationDeleteRegistryArgs = {
 
 
 export type GqlMutationDeleteUserArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type GqlMutationDeployAppArgs = {
-  build?: InputMaybe<Scalars['Boolean']>;
-  deploy?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
 };
 
@@ -297,9 +299,8 @@ export type GqlQuery = {
   __typename?: 'Query';
   app?: Maybe<GqlApp>;
   apps?: Maybe<Array<Maybe<GqlApp>>>;
-  buildLog?: Maybe<GqlBuildJob>;
-  buildLogs?: Maybe<Array<Maybe<GqlBuildJob>>>;
   components?: Maybe<Array<Maybe<GqlComponent>>>;
+  deployments?: Maybe<Array<Maybe<GqlDeployment>>>;
   me?: Maybe<GqlUser>;
   nodeGroups?: Maybe<Array<Maybe<GqlNodeGroup>>>;
   nodes?: Maybe<Array<Maybe<GqlKubeNode>>>;
@@ -319,19 +320,6 @@ export type GqlQuery = {
 
 export type GqlQueryAppArgs = {
   id: Scalars['ID'];
-};
-
-
-export type GqlQueryBuildLogArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type GqlQueryBuildLogsArgs = {
-  appId?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  status?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -435,11 +423,6 @@ export type GqlResourceUsageDetail = {
 export type GqlSetupStatus = {
   __typename?: 'SetupStatus';
   hasOwnerSetup?: Maybe<Scalars['Boolean']>;
-};
-
-export type GqlSubscription = {
-  __typename?: 'Subscription';
-  buildQueueChanged?: Maybe<Array<Maybe<GqlBuildJob>>>;
 };
 
 export type GqlUser = {

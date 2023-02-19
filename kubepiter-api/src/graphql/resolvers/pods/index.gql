@@ -1,0 +1,12 @@
+extend type Query {
+  pods(appId: String): [Pod]
+  pod(name: String!): Pod
+  podLog(name: String!, tailLines: Int = 200): String
+}
+
+type Pod {
+  name: String
+  status: String
+  podScheduledTime: String
+  raw: JSON
+}

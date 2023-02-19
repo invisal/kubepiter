@@ -5,7 +5,6 @@ import GraphQLTypeDefs from './graphql/GraphQLTypeDefs';
 import http from 'http';
 import setupApis from './apis';
 import { KubepiterUser } from './types/common';
-import { getBuildManager } from './k8s/ImageBuilderManager';
 import getDatabaseConnection from './drivers/databases/DatabaseInstance';
 import KubeMetric from './k8s/KubeMetric';
 import { getKuberneteApi, getKuberneteCore, getKuberneteNetwork, getKuberneterConfig } from './k8s/getKubernete';
@@ -18,7 +17,6 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import logger from './global/logger';
 import CronManager from './crons/CronManager';
 
-const buildManager = getBuildManager();
 const metricManager = new KubeMetric(getKuberneterConfig(), getKuberneteCore());
 
 async function startServer() {
@@ -62,7 +60,6 @@ async function startServer() {
       return {
         db,
         user,
-        buildManager,
         metricManager,
 
         // Kube

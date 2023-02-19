@@ -1,25 +1,21 @@
 import express from 'express';
-import handleDeployApp from './handleDeployApp';
-import handleGenerateBuildCommand from './handleGenerateBuildCommand';
-import handleGitWebhook from './handleGitWebhook';
-import * as pkg from 'package.json';
+import withAttachApp from './withAttachedApp';
+
+function createBuild() {}
+
+function updateBuild() {}
+
+function deployBuild() {}
 
 export default function setupApis(app: express.Application) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  app.get('/health', (req, res) => {
+  app.get('/health', (_, res) => {
     return res.json({ status: 1 });
   });
 
-  app.get('/', (req, res) => {
-    return res.json({
-      version: pkg.version,
-      name: pkg.name,
-    });
-  });
-
-  app.get('/app/generate_build/:app_id/:token', handleGenerateBuildCommand);
-  app.post('/app/deploy/:app_id/:token', handleDeployApp);
-  app.all('/webhook/:app_id/:token', handleGitWebhook);
+  app.post('/api/app/:app_id/build', withAttachApp(createBuild)); // Get the build setting
+  app.put('/api/app/:app_id/build', withAttachApp(updateBuild)); // Update the build status
+  app.post('/api/app/:app_id/deploy/:build_id', withAttachApp(deployBuild)); // Deploy the build
 }
