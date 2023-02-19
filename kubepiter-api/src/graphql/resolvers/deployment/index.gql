@@ -7,9 +7,7 @@ type Deployment {
   type: DeploymentType
   status: DeploymentStatus
   version: String
-
   buildInfo: DeploymentBuildInfo
-
   createdAt: Int
   completedAt: Int
 }

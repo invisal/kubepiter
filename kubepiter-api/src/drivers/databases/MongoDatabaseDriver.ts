@@ -1,12 +1,11 @@
 import { Db, MongoClient, ObjectId, WithId } from 'mongodb';
+import { GqlDeployment } from 'src/generated/graphql';
 import {
   KubepiterUserToken,
   KubepiterBuilderSetting,
-  KubepiterBuildJobLog,
   KubepiterNodeGroup,
   KubepiterApp,
   KubepiterUser,
-  KubepiterDeploymentLog,
   KubepiterEventLog,
 } from '../../types/common';
 import DatabaseInterface from './DatabaseInterface';
@@ -177,35 +176,36 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     return result.acknowledged;
   }
 
-  async updateBuildLog(id: string, log: KubepiterBuildJobLog): Promise<boolean> {
-    await this.db.collection('build_logs').updateOne(
+  // Deployment Log
+  async createDeployment(value: Partial<GqlDeployment>): Promise<string> {
+    const db = await this.getConnection();
+    const result = await db.collection('deployments').insertOne(value);
+    return result.insertedId.toString();
+  }
+
+  async updateDeployment(id: string, value: Partial<GqlDeployment>): Promise<boolean> {
+    const db = await this.getConnection();
+    const result = await db.collection('deployments').updateOne(
+      { _id: new ObjectId(id) },
       {
-        id,
-      },
-      {
-        $set: log,
+        $set: value,
       },
     );
 
-    return true;
+    return result.acknowledged;
   }
 
-  async getBuildLog(id: string): Promise<KubepiterBuildJobLog> {
+  async getDeployment(id: string): Promise<GqlDeployment> {
     const db = await this.getConnection();
-    return await db.collection('build_logs').findOne<KubepiterBuildJobLog>({ id });
+    return await db.collection('deployments').findOne<GqlDeployment>({ _id: new ObjectId(id) });
   }
 
-  async getBuildLogList(
-    condition: { appId?: string; status?: string[] },
-    offset: number,
-    limit: number,
-  ): Promise<KubepiterBuildJobLog[]> {
+  async getDeploymentList(condition: { appId?: string }, offset: number, limit: number): Promise<GqlDeployment[]> {
     const db = await this.getConnection();
     const cursor = db
-      .collection<KubepiterBuildJobLog>('build_logs')
+      .collection<GqlDeployment>('build_logs')
       .find({
         ...(condition.appId ? { appId: condition.appId } : undefined),
-        ...(condition.status ? { status: { $in: condition.status } } : undefined),
       } as unknown)
       .sort({
         createdAt: -1,
@@ -213,24 +213,6 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
       .skip(offset)
       .limit(limit);
     return cursor.toArray();
-  }
-
-  async insertBuildLog(log: KubepiterBuildJobLog): Promise<string> {
-    const db = await this.getConnection();
-    await db.collection('build_logs').insertOne(log);
-    return log.id;
-  }
-
-  // Deployment Log
-  async insertDeploymentLog(log: Partial<KubepiterDeploymentLog>): Promise<string> {
-    const db = await this.getConnection();
-    const result = await db.collection('deployment_logs').insertOne(log);
-    return result.insertedId.toString();
-  }
-
-  async getDeploymentLog(id: string): Promise<KubepiterDeploymentLog> {
-    const db = await this.getConnection();
-    return await db.collection('deployment_logs').findOne<KubepiterDeploymentLog>({ _id: new ObjectId(id) });
   }
 
   // Cron event log
@@ -245,24 +227,6 @@ export default class MongoDatabaseDriver extends DatabaseInterface {
     const cursor = db
       .collection<KubepiterEventLog>('event_logs')
       .find()
-      .sort({
-        createdAt: -1,
-      })
-      .skip(offset)
-      .limit(limit);
-
-    return cursor.toArray();
-  }
-
-  async getDeploymentLogList(
-    condition: { appId?: string },
-    offset: number,
-    limit: number,
-  ): Promise<KubepiterDeploymentLog[]> {
-    const db = await this.getConnection();
-    const cursor = db
-      .collection<KubepiterDeploymentLog>('deployment_logs')
-      .find(condition?.appId ? condition : undefined)
       .sort({
         createdAt: -1,
       })

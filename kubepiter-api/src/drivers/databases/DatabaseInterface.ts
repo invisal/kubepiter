@@ -1,10 +1,10 @@
+import { GqlDeployment } from 'src/generated/graphql';
 import {
   KubepiterUserToken,
   KubepiterBuilderSetting,
   KubepiterNodeGroup,
   KubepiterApp,
   KubepiterUser,
-  KubepiterDeploymentLog,
   KubepiterEventLog,
 } from '../../types/common';
 
@@ -34,13 +34,10 @@ export default abstract class DatabaseInterface {
   abstract getNodeGroupList(): Promise<KubepiterNodeGroup[]>;
 
   // Deployment Log
-  abstract insertDeploymentLog(value: Partial<KubepiterDeploymentLog>): Promise<string>;
-  abstract getDeploymentLog(id: string): Promise<KubepiterDeploymentLog>;
-  abstract getDeploymentLogList(
-    condition: { appId?: string },
-    offset: number,
-    limit: number,
-  ): Promise<KubepiterDeploymentLog[]>;
+  abstract createDeployment(value: Partial<GqlDeployment>): Promise<string>;
+  abstract updateDeployment(id: string, data: Partial<GqlDeployment>): Promise<boolean>;
+  abstract getDeployment(id: string): Promise<GqlDeployment>;
+  abstract getDeploymentList(condition: { appId?: string }, offset: number, limit: number): Promise<GqlDeployment[]>;
 
   // Event log
   abstract insertEventLog(value: Partial<KubepiterEventLog>): Promise<string>;

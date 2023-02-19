@@ -1,6 +1,5 @@
 import { V1Ingress, V1PodSpec } from '@kubernetes/client-node';
 import { GqlAppResource } from '../generated/graphql';
-import { ImageBuildJobStatus } from '../k8s/ImageBuilderManager';
 
 export interface KubepiterAppConfig {
   resources?: GqlAppResource | null;
@@ -70,32 +69,6 @@ export interface KubepiterNodeGroup {
 
 export interface KubepiterBuilderSetting {
   nodeGroup?: string;
-}
-
-export interface KubepiterDeploymentLog {
-  id: string;
-  appId: string;
-  ingressYaml: string;
-  ingressSuccess: boolean;
-  ingressResponse: string;
-  serviceYaml: string;
-  serviceSuccess: boolean;
-  serviceResponse: string;
-  deploymentYaml: string;
-  deploymentSuccess: boolean;
-  deploymentResponse: string;
-  createdAt: number;
-}
-
-export interface KubepiterBuildJobLog {
-  id: string;
-  appId: string;
-  version: string;
-  createdAt: number;
-  startAt: number | null;
-  endAt: number | null;
-  status: ImageBuildJobStatus;
-  logs: string;
 }
 
 export interface KubepiterEventLog {

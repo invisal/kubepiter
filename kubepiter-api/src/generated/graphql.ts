@@ -157,6 +157,17 @@ export type GqlDeploymentBuildInfo = {
   repository?: Maybe<Scalars['String']>;
 };
 
+export type GqlDeploymentBuildInfoInput = {
+  id?: InputMaybe<Scalars['String']>;
+  jobId?: InputMaybe<Scalars['String']>;
+  repository?: InputMaybe<Scalars['String']>;
+};
+
+export type GqlDeploymentInput = {
+  buildInfo?: InputMaybe<GqlDeploymentBuildInfoInput>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
 export enum GqlDeploymentStatus {
   Failed = 'FAILED',
   Pending = 'PENDING',
